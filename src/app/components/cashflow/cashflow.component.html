@@ -1,0 +1,239 @@
+<div id="main" class="row">
+    <div class="row">
+        <div class="col-sm-2">
+            <strong>Saldo Atual: </strong>
+            <span *ngIf="!isGettingBalance">{{balance | currency : 'BRL'}}</span>
+            <button *ngIf="!isGettingBalance" (click)="openEditBalance()" mat-icon-button aria-label="Editar" color="primary">
+                <mat-icon class="edit-balance">edit</mat-icon>
+            </button>
+            <span *ngIf="isGettingBalance">carregando saldo...</span>
+        </div>
+    </div>
+    <div class="row">
+        <mat-tab-group>
+            <mat-tab label="Lançamentos pendentes">
+                <div *ngFor="let month of entriesByMonth" class="row">
+                   <div class="col" *ngIf="month.month >= 0 || month.entries.length > 0">
+                    <h3>{{month.monthDescription}}</h3>
+
+                    <table class="table table-striped">
+                       <thead>
+                           <th>Data</th>
+                           <th>Descrição</th>
+                           <th>Valor</th>
+                           <th>Previsão</th>
+                           <th>Efetivar</th>
+                           <th>Ações</th>
+                       </thead>
+                       <tbody>
+                           <tr *ngFor="let entry of month.entries">
+                              <td> {{entry.dueDate | date : 'dd/MM/yyyy'}} </td>
+                              <td>
+                                 <button *ngIf="entry.creditCardId" mat-icon-button color="primary" aria-label="Example icon button with a home icon">
+                                    <mat-icon *ngIf="entry.creditCardId" class="credit_card" (click)="openCardDetails(entry.entries)">credit_card</mat-icon>
+                                  </button>
+                                  {{entry.description}}
+                                  <span *ngIf="entry.showRecurrenceNumber">({{entry.recurrenceNumber}}/{{entry.recurrenceTotal}})</span>
+                              </td>
+                              <td [style.color]="entry.type === 'C' ? 'blue' : 'red'">
+                                {{entry.value | currency: 'BRL'}}  {{entry.type}}
+                              </td>
+                              <td [style.color]="entry.prevision >= 0 ? 'blue' : 'red'">
+                                {{entry.prevision | currency: 'BRL'}}
+                              </td>
+                              <td>
+                                <button mat-icon-button aria-label="Efetivar" color="primary" (click)="commitEntry(entry, month)">
+                                    <mat-icon colo>check_circle_outline</mat-icon>
+                                  </button>
+                              </td>
+                              <td>
+                                  <button *ngIf="!entry.creditCardId" (click)="openEditEntry(entry)" mat-icon-button aria-label="Editar" color="primary">
+                                    <mat-icon colo>edit</mat-icon>
+                                  </button>
+                                  <button *ngIf="!entry.creditCardId" (click)="openDeleteDialog(entry)" mat-icon-button aria-label="Excluir" color="primary">
+                                    <mat-icon colo>delete</mat-icon>
+                                  </button>
+                              </td>
+                           </tr>
+                           <tr *ngIf="month.entries.length === 0">
+                                <td colspan="6">Nenhum registro encontrado</td>
+                           </tr>
+                       </tbody>
+                    </table>
+                   </div>
+                </div>
+
+                <div class="row">
+                    <button mat-raised-button color="primary" (click)="loadMoreEntries()">Carregar mais</button>
+                </div>
+            </mat-tab>
+
+            <mat-tab label="Novo lançamento">
+                <form id="form" [formGroup]="formGroup" #formDirective="ngForm">
+                    <div class="row">
+                        <mat-radio-group aria-label="Select an option" formControlName="type">
+                            <mat-radio-button value="C">Crédito</mat-radio-button>
+                            <mat-radio-button value="D" id="debit-rb">Débito</mat-radio-button>
+                        </mat-radio-group>
+                    </div>
+                    <div class="row">
+                        <mat-form-field>
+                            <mat-label>Descrição</mat-label>
+                            <input matInput placeholder="Descrição" formControlName="description">
+                        </mat-form-field>
+                        <mat-form-field>
+                            <mat-label>Data</mat-label>
+                            <input matInput type="date" placeholder="Data" formControlName="dueDate">
+                        </mat-form-field>
+                        <mat-form-field>
+                            <mat-label>Valor</mat-label>
+                            <input matInput currencyMask placeholder="Valor" formControlName="value">
+                        </mat-form-field>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <mat-form-field appearance="fill">
+                                <mat-label>Cartão</mat-label>
+                                <mat-select formControlName="creditCardId" (selectionChange)="setInvoices($event.value)">
+                                    <mat-option value="">Selecione</mat-option>
+                                    <mat-option *ngFor="let card of creditCards" [value]="card._id">
+                                        {{card.name}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <div class="col">
+                            <mat-form-field appearance="fill">
+                                <mat-label>Fatura</mat-label>
+                                <mat-select formControlName="invoice" placeholder="Selecione">
+                                    <mat-option *ngFor="let invoice of invoices" [value]="invoice">
+                                        {{invoice | date : 'dd/MM/yyyy'}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <mat-form-field appearance="fill">
+                                <mat-label>Recorrência</mat-label>
+                                <mat-select formControlName="recurrenceType">
+                                <mat-option *ngFor="let recurrence of recurrences" [value]="recurrence.id">
+                                    {{recurrence.description}}
+                                </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <div class="col">
+                            <mat-form-field>
+                                <mat-label>Quantidade</mat-label>
+                                <input matInput type="number" placeholder="Quantidade" formControlName="recurrenceNumber">
+                            </mat-form-field>
+                        </div>
+                        <div class="col">
+                            <section class="example-section">
+                                <mat-checkbox formControlName="showRecurrenceNumber" class="example-margin">Exibir recorrência na descrição</mat-checkbox>
+                            </section>
+                        </div>
+                    </div>
+                    <div class="row">
+                    <div class="col">
+                        <button mat-raised-button color="primary" (click)="save(formDirective)">Salvar</button>
+                    </div>
+                    </div>
+                </form>
+            </mat-tab>
+        </mat-tab-group>
+    </div>
+</div>
+
+<ng-template #deleteManyDialogRef>
+    <p>Deseja excluir o registro?</p>
+    <button mat-raised-button color="primary" class="dialog-button" (click)="delete(0)">Sim, excluir apenas esse</button>
+    <button mat-raised-button color="warn" class="dialog-button" (click)="delete(1)">Sim, excluir todos</button>
+    <button mat-raised-button color="secondary" class="dialog-button" (click)="closeDialog()">Não, fechar</button>
+</ng-template>
+
+<ng-template #deleteDialogRef>
+    <p>Deseja excluir o registro?</p>
+    <button mat-raised-button color="warn" class="dialog-button" (click)="delete(0)">Sim, excluir</button>
+    <button mat-raised-button color="secondary" class="dialog-button" (click)="closeDialog()">Não, fechar</button>
+</ng-template>
+
+<ng-template #creditCardDetailsRef>
+    <div class="row">
+        <div class="col">
+            <table class="table table-striped">
+                <thead>
+                    <th>Data</th>
+                    <th>Descrição</th>
+                    <th>Valor</th>
+                    <th>Ações</th>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let entry of cardEntries">
+                        <td>{{entry.purchaseDate | date: 'dd/MM/yyyy'}}</td>
+                        <td>{{entry.description}}</td>
+                        <td>{{entry.value | currency: 'BRL'}}</td>
+                        <td>
+                            <button (click)="openEditEntry(entry)" mat-icon-button aria-label="Editar" color="primary">
+                                <mat-icon colo>edit</mat-icon>
+                              </button>
+                              <button (click)="openDeleteDialog(entry)" mat-icon-button aria-label="Excluir" color="primary">
+                                <mat-icon colo>delete</mat-icon>
+                              </button>
+                          </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <button style="float: right;" mat-raised-button color="secondary" class="dialog-button" (click)="closeCreditCardDetails()">Fechar</button>
+
+</ng-template>
+
+<ng-template #editEntryRef>
+   
+    <form id="form" [formGroup]="formGroupEdition">
+        <div *ngIf="entryToEdit.recurrenceId" class="row" style="margin-bottom: 10px;">
+            <mat-radio-group aria-label="Select an option" formControlName="updateAll">
+                <mat-radio-button value="0">Alterar apenas esse</mat-radio-button>
+                <mat-radio-button value="1" id="debit-rb">Alterar todos</mat-radio-button>
+            </mat-radio-group>
+        </div>
+        <div class="row" style="margin-bottom: 10px;">
+            <mat-radio-group aria-label="Select an option" formControlName="type">
+                <mat-radio-button value="C">Crédito</mat-radio-button>
+                <mat-radio-button value="D" id="debit-rb">Débito</mat-radio-button>
+            </mat-radio-group>
+        </div>
+        <div class="row">
+            <mat-form-field>
+                <mat-label>Descrição</mat-label>
+                <input matInput placeholder="Descrição" formControlName="description">
+            </mat-form-field>
+            <mat-form-field *ngIf="formGroupEdition.value.updateAll == '0'">
+                <mat-label>Data</mat-label>
+                <input matInput type="date" placeholder="Data" formControlName="dueDate">
+            </mat-form-field>
+            <mat-form-field>
+                <mat-label>Valor</mat-label>
+                <input matInput currencyMask placeholder="Valor" formControlName="value">
+            </mat-form-field>
+        </div>
+        <button mat-raised-button color="primary" class="dialog-button" (click)="update()">Salvar</button>
+        <button mat-raised-button color="secondary" class="dialog-button" (click)="closeEditEntry()">Fechar</button>
+    </form>
+</ng-template>
+
+<ng-template #editBalanceRef>
+  <form id="form" [formGroup]="formGroupBalance">
+    <mat-form-field>
+        <mat-label>Saldo</mat-label>
+        <input matInput currencyMask placeholder="Saldo" formControlName="newBalance">
+    </mat-form-field>
+    <button mat-raised-button color="primary" class="dialog-button" (click)="updateBalance()">Salvar</button>
+    <button mat-raised-button color="secondary" class="dialog-button" (click)="closeEditBalance()">Fechar</button>
+ </form>
+</ng-template>
