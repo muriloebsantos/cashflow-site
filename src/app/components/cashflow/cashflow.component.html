@@ -59,6 +59,15 @@
                                 <td colspan="6">Nenhum registro encontrado</td>
                            </tr>
                        </tbody>
+                       <tfoot>
+                        <tr>
+                            <td>Total mês</td>
+                            <td></td>
+                            <td colspan="4" [style.color]="month.totalMonth >= 0 ? 'blue' : 'red'">
+                                {{month.totalMonth | currency: 'BRL'}}
+                            </td>
+                        </tr>
+                    </tfoot>
                     </table>
                    </div>
                 </div>
@@ -161,36 +170,40 @@
 </ng-template>
 
 <ng-template #creditCardDetailsRef>
-    <div class="row">
-        <div class="col">
-            <table class="table table-striped">
-                <thead>
-                    <th>Data</th>
-                    <th>Descrição</th>
-                    <th>Valor</th>
-                    <th>Ações</th>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let entry of cardEntries">
-                        <td>{{entry.purchaseDate | date: 'dd/MM/yyyy'}}</td>
-                        <td>{{entry.description}}</td>
-                        <td>{{entry.value | currency: 'BRL'}}</td>
-                        <td>
-                            <button (click)="openEditEntry(entry)" mat-icon-button aria-label="Editar" color="primary">
-                                <mat-icon colo>edit</mat-icon>
-                              </button>
-                              <button (click)="openDeleteDialog(entry)" mat-icon-button aria-label="Excluir" color="primary">
-                                <mat-icon colo>delete</mat-icon>
-                              </button>
-                          </td>
-                    </tr>
-                </tbody>
-            </table>
+    <mat-dialog-content> 
+        <div class="row">
+            <div class="col">
+                <table class="table table-striped">
+                    <thead>
+                        <th>Data</th>
+                        <th>Descrição</th>
+                        <th>Valor</th>
+                        <th>Ações</th>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let entry of cardEntries">
+                            <td>{{entry.purchaseDate | date: 'dd/MM/yyyy'}}</td>
+                            <td>
+                                {{entry.description}}
+                                <span *ngIf="entry.showRecurrenceNumber">({{entry.recurrenceNumber}}/{{entry.recurrenceTotal}})</span>
+                            </td>
+                            <td>{{entry.value | currency: 'BRL'}}</td>
+                            <td>
+                                <button (click)="openEditEntry(entry)" mat-icon-button aria-label="Editar" color="primary">
+                                    <mat-icon colo>edit</mat-icon>
+                                </button>
+                                <button (click)="openDeleteDialog(entry)" mat-icon-button aria-label="Excluir" color="primary">
+                                    <mat-icon colo>delete</mat-icon>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
-    </div>
 
-    <button style="float: right;" mat-raised-button color="secondary" class="dialog-button" (click)="closeCreditCardDetails()">Fechar</button>
-
+        <button style="float: right;" mat-raised-button color="secondary" class="dialog-button" (click)="closeCreditCardDetails()">Fechar</button>
+    </mat-dialog-content> 
 </ng-template>
 
 <ng-template #editEntryRef>

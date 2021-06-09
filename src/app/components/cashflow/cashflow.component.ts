@@ -15,7 +15,8 @@ interface EntriesByMonth {
   monthDescription: string;
   month: number;
   year: number;
-  entries: Entry[]
+  entries: Entry[];
+  totalMonth: number;
 }
 
 @Component({
@@ -135,7 +136,8 @@ export class CashflowComponent implements OnInit {
       monthDescription: 'Atrasados',
       month: -1,
       year: -1,
-      entries: []
+      entries: [],
+      totalMonth: 0
     });
    }
 
@@ -147,7 +149,8 @@ export class CashflowComponent implements OnInit {
         monthDescription: `${this.monthsNames[month]} ${year}`,
         month: month,
         year: year,
-        entries: []
+        entries: [],
+        totalMonth: 0
       });
 
       date.setMonth(month + 1);
@@ -188,6 +191,11 @@ export class CashflowComponent implements OnInit {
 
         entry.entries.push(newEntry);
       } 
+
+      if(newEntry.type === 'C')
+        entryByMonth.totalMonth+= newEntry.value;
+      else
+        entryByMonth.totalMonth-= newEntry.value;
     });
 
     this.calcBalance();
