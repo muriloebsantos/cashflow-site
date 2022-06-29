@@ -14,4 +14,8 @@ export class CreditCardService extends HttpService {
     public getCreditCards(): Observable<CreditCard[]> {
         return this.getAuthenticated<CreditCard[]>('/credit-cards');
     }
+
+    public createCreditCard(creditCard:CreditCard):Observable<CreditCard> {
+        return this.postAuthenticated<CreditCard>('/credit-cards', creditCard);
+    } 
 }

@@ -2,9 +2,7 @@ import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { CreditCard } from 'src/app/core/models/credit-card';
-import { Entry } from 'src/app/core/models/entry';
 import { CreditCardService } from 'src/app/core/services/credit-card.service';
-import { EntryService } from 'src/app/core/services/entry.service';
 
 @Component({
   selector: 'app-credit-cards',
@@ -13,7 +11,6 @@ import { EntryService } from 'src/app/core/services/entry.service';
 })
 export class CreditCardsComponent implements OnInit {
   public formCreateCard:FormGroup
-
 
   constructor(
     private creditCardService: CreditCardService,
@@ -26,18 +23,21 @@ export class CreditCardsComponent implements OnInit {
   private createCardDialogRef: MatDialogRef<any, any>;
   
   ngOnInit() {
-    this.creditCardService.getCreditCards().subscribe({
-      next: (responseCreditCards) => {
-        this.creditCards = responseCreditCards
-
-      }
-    })
-
+    this.listCards()
     this.initFormGroup()
   }
+  
+  createCreditCard(){
+    if(this.formCreateCard.valid) {
+      const creditCard = this.formCreateCard.value as CreditCard;
+      this.creditCardService.createCreditCard(creditCard).subscribe((createdCard) => {
+        this.createCardDialogRef.close();
+        this.listCards()
+      })
+    }
+  }
 
-
-  createCards() {
+  openModal() {
     this.createCardDialogRef = this.dialog.open(this.createCardRef);
   }
 
@@ -49,4 +49,12 @@ export class CreditCardsComponent implements OnInit {
     })
   }
 
+  listCards() {
+    this.creditCardService.getCreditCards().subscribe({
+      next: (responseCreditCards) => {
+        this.creditCards = responseCreditCards
+
+      }
+    })
+  }
 }

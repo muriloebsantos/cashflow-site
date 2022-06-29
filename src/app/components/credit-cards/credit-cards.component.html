@@ -1,4 +1,4 @@
-<button (click)="createCards()" mat-icon-button color="primary">Adicionar Cartao</button>
+<button (click)="openModal()" mat-icon-button color="primary">Adicionar Cartao</button>
 
 <table class="table table-striped">
   <thead>
@@ -32,7 +32,7 @@
   </mat-form-field>
 
   <div class="createCardButtonsDiv">
-    <button mat-raised-button color="primary">Adicionar</button>
+    <button mat-raised-button color="primary" (click)="createCreditCard()">Adicionar</button>
     <button mat-raised-button color="secondary">Fechar</button>
   </div>
 
