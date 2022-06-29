@@ -5,12 +5,21 @@
     <th>Nome</th>
     <th>Fechamento</th>
     <th>Vencimento</th>
+    <th>Ações</th>
   </thead>
   <tbody>
     <tr *ngFor="let card of creditCards">
-      <th>{{ card.name }}</th>
-      <th>{{ card.dueDay }}</th>
-      <th>{{ card.closingDay }}</th>
+      <td>{{ card.name }}</td>
+      <td>{{ card.dueDay }}</td>
+      <td>{{ card.closingDay }}</td>
+      <td>
+        <button mat-icon-button aria-label="Editar" color="primary" (click)="openEditModal(card._id)">
+          <mat-icon colo>edit</mat-icon>
+        </button>
+        <button mat-icon-button aria-label="Excluir" color="primary" (click)="openDeleteModal(card._id)">
+          <mat-icon colo>delete</mat-icon>
+        </button>
+      </td>
     </tr>
   </tbody>
 </table>
@@ -33,8 +42,14 @@
 
   <div class="createCardButtonsDiv">
     <button mat-raised-button color="primary" (click)="createCreditCard()">Adicionar</button>
-    <button mat-raised-button color="secondary">Fechar</button>
+    <button mat-raised-button color="secondary" (click)="closeModal()">Fechar</button>
   </div>
 
 </form>
+</ng-template>
+
+<ng-template #deleteCardsTemplate>
+  <p>Deseja excluir o Cartão?</p>
+  <button mat-raised-button color="primary" class="dialog-button" (click)="deleteCreditCard()">Sim, excluir este cartão</button>
+  <button mat-raised-button color="secondary" class="dialog-button" (click)="closeDeleteModal()">Não, fechar</button>
 </ng-template>

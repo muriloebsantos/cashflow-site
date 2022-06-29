@@ -11,6 +11,7 @@ import { CreditCardService } from 'src/app/core/services/credit-card.service';
 })
 export class CreditCardsComponent implements OnInit {
   public formCreateCard:FormGroup
+  public creditCardId = ''
 
   constructor(
     private creditCardService: CreditCardService,
@@ -20,6 +21,7 @@ export class CreditCardsComponent implements OnInit {
 
   public creditCards: CreditCard[] = []
   @ViewChild("createCardsTemplate") createCardRef: TemplateRef<any>;
+  @ViewChild("deleteCardsTemplate") deleteCardRef: TemplateRef<any>;
   private createCardDialogRef: MatDialogRef<any, any>;
   
   ngOnInit() {
@@ -37,8 +39,37 @@ export class CreditCardsComponent implements OnInit {
     }
   }
 
+  deleteCreditCard() {
+    this.creditCardService.deleteCreditCard(this.creditCardId).subscribe(() => {
+      this.listCards()
+      this.closeDeleteModal()
+    })
+  }
+
   openModal() {
     this.createCardDialogRef = this.dialog.open(this.createCardRef);
+  }
+
+  openEditModal(card:any) {
+    this.formCreateCard.patchValue({
+      name: card.name,
+      dueDay: card.dueDay,
+      closingDay: card.closingDay
+    })
+    this.createCardDialogRef = this.dialog.open(this.createCardRef);
+  }
+
+  openDeleteModal(creditCardId:string){
+    this.creditCardId = creditCardId
+    this.createCardDialogRef = this.dialog.open(this.deleteCardRef);
+  }
+
+  closeModal() {
+    this.createCardDialogRef.close(this.createCardRef)
+  }
+
+  closeDeleteModal() {
+    this.createCardDialogRef.close(this.deleteCardRef)
   }
 
   initFormGroup() {
