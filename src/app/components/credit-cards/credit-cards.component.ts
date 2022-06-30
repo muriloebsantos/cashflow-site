@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { CreditCard } from 'src/app/core/models/credit-card';
 import { CreditCardService } from 'src/app/core/services/credit-card.service';
-
+import { MatSnackBar } from '@angular/material/snack-bar';
 @Component({
   selector: 'app-credit-cards',
   templateUrl: './credit-cards.component.html',
@@ -16,7 +16,8 @@ export class CreditCardsComponent implements OnInit {
   constructor(
     private creditCardService: CreditCardService,
     private dialog: MatDialog,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private snackBarService:MatSnackBar
   ) { }
 
   public creditCards: CreditCard[] = []
@@ -35,6 +36,7 @@ export class CreditCardsComponent implements OnInit {
       this.creditCardService.createCreditCard(creditCard).subscribe((createdCard) => {
         this.createCardDialogRef.close();
         this.listCards()
+        this.snackBarService.open('Criação de cartão concluida','Fechar' ,{ verticalPosition: 'top', duration: 3000 });
       })
     }
   }
@@ -46,14 +48,16 @@ export class CreditCardsComponent implements OnInit {
       this.creditCardService.updateCreditCard(creditCard).subscribe((createdCard) => {
         this.createCardDialogRef.close();
         this.listCards()
+        this.snackBarService.open('Atualização de cartão concluida','Fechar' ,{ verticalPosition: 'top', duration: 3000 });
       })
     }
   }
 
   deleteCreditCard() {
     this.creditCardService.deleteCreditCard(this.creditCardId).subscribe(() => {
-      this.listCards()
       this.closeDeleteModal()
+      this.listCards()
+      this.snackBarService.open('Exclusão de cartão concluida','Fechar' ,{ verticalPosition: 'top', duration: 3000 });
     })
   }
 
