@@ -14,4 +14,16 @@ export class CreditCardService extends HttpService {
     public getCreditCards(): Observable<CreditCard[]> {
         return this.getAuthenticated<CreditCard[]>('/credit-cards');
     }
+
+    public createCreditCard(creditCard:CreditCard):Observable<CreditCard> {
+        return this.postAuthenticated<CreditCard>('/credit-cards', creditCard);
+    }
+    
+    public updateCreditCard(creditCard:CreditCard):Observable<CreditCard> {
+        return this.putAuthenticated<CreditCard>(`/credit-cards/${creditCard._id}`, creditCard)
+    }
+
+    public deleteCreditCard(creditCardId:string):Observable<any> {
+        return this.deleteAuthenticated<CreditCard>(`/credit-cards/${creditCardId}`)
+    }
 }

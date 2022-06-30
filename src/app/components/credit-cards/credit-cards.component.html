@@ -1,3 +1,56 @@
-<p>
-  credit-cards works!
-</p>
+<button (click)="openModal()" mat-icon-button color="primary">Adicionar Cartão</button>
+
+<table class="table table-striped">
+  <thead>
+    <th>Nome</th>
+    <th>Fechamento</th>
+    <th>Vencimento</th>
+    <th>Ações</th>
+  </thead>
+  <tbody>
+    <tr *ngFor="let card of creditCards">
+      <td>{{ card.name }}</td>
+      <td>{{ card.dueDay }}</td>
+      <td>{{ card.closingDay }}</td>
+      <td>
+        <button mat-icon-button aria-label="Editar" color="primary" (click)="openEditModal(card)">
+          <mat-icon colo>edit</mat-icon>
+        </button>
+        <button mat-icon-button aria-label="Excluir" color="primary" (click)="openDeleteModal(card._id)">
+          <mat-icon colo>delete</mat-icon>
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+
+<ng-template #createCardsTemplate>
+<form name="CreateCard" [formGroup]="creditCardFormGroup" class="createCardForm">
+
+  <mat-form-field>
+    <input matInput type="text" placeholder="Nome do Cartão" formControlName="name">
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput type="number" placeholder="Fechamento" formControlName="closingDay">
+  </mat-form-field>
+
+  <mat-form-field>
+    <input matInput type="number" placeholder="Vencimento" formControlName="dueDay">
+  </mat-form-field>
+
+  <div class="createCardButtonsDiv">
+    <button *ngIf="!creditCardId" mat-raised-button color="primary" class="dialog-button" (click)="createCreditCard()">Adicionar</button>
+    <button *ngIf="creditCardId" mat-raised-button color="primary" class="dialog-button" (click)="updateCreditCard()">Atualizar</button>
+    <button mat-raised-button color="secondary" (click)="closeModal()">Fechar</button>
+  </div>
+
+</form>
+</ng-template>
+
+<ng-template #deleteCardsTemplate>
+  <p>Deseja excluir o Cartão?</p>
+  <button mat-raised-button color="primary" class="dialog-button" (click)="deleteCreditCard()">Sim, excluir este cartão</button>
+  <button mat-raised-button color="secondary" class="dialog-button" (click)="closeDeleteModal()">Não, fechar</button>
+</ng-template>
