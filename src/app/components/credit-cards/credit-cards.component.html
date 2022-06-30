@@ -1,4 +1,4 @@
-<button (click)="openModal()" mat-icon-button color="primary">Adicionar Cartao</button>
+<button (click)="openModal()" mat-icon-button color="primary">Adicionar Cartão</button>
 
 <table class="table table-striped">
   <thead>
@@ -29,20 +29,20 @@
 <form name="CreateCard" [formGroup]="formCreateCard" class="createCardForm">
 
   <mat-form-field>
-    <input matInput  type="text" placeholder="Nome do Cartao" formControlName="name" >
+    <input matInput type="text" placeholder="Nome do Cartão" formControlName="name">
   </mat-form-field>
 
   <mat-form-field>
-    <input matInput  type="number" placeholder="Fechamento" min="1" max="30" formControlName="closingDay">
+    <input matInput type="number" placeholder="Fechamento" formControlName="closingDay">
   </mat-form-field>
 
   <mat-form-field>
-    <input matInput  type="number" placeholder="Vencimento" min="1" max="30" formControlName="dueDay">
+    <input matInput type="number" placeholder="Vencimento" formControlName="dueDay">
   </mat-form-field>
 
   <div class="createCardButtonsDiv">
-    <button *ngIf="!creditCardId" mat-raised-button color="primary" (click)="createCreditCard()">Adicionar</button>
-    <button *ngIf="creditCardId" mat-raised-button color="primary" (click)="updateCreditCard()">Atualizar</button>
+    <button *ngIf="!creditCardId" mat-raised-button color="primary" class="dialog-button" (click)="createCreditCard()">Adicionar</button>
+    <button *ngIf="creditCardId" mat-raised-button color="primary" class="dialog-button" (click)="updateCreditCard()">Atualizar</button>
     <button mat-raised-button color="secondary" (click)="closeModal()">Fechar</button>
   </div>
 

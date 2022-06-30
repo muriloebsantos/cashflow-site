@@ -36,7 +36,7 @@ export class CreditCardsComponent implements OnInit {
       this.creditCardService.createCreditCard(creditCard).subscribe((createdCard) => {
         this.createCardDialogRef.close();
         this.listCards()
-        this.snackBarService.open('Criação de cartão concluida','Fechar' ,{ verticalPosition: 'top', duration: 3000 });
+        this.snackBarService.open('Criação de cartão concluida','Fechar',{ verticalPosition: 'top', duration: 3000 });
       })
     }
   }
@@ -48,7 +48,7 @@ export class CreditCardsComponent implements OnInit {
       this.creditCardService.updateCreditCard(creditCard).subscribe((createdCard) => {
         this.createCardDialogRef.close();
         this.listCards()
-        this.snackBarService.open('Atualização de cartão concluida','Fechar' ,{ verticalPosition: 'top', duration: 3000 });
+        this.snackBarService.open('Atualização de cartão concluida','Fechar',{ verticalPosition: 'top', duration: 3000 });
       })
     }
   }
@@ -57,7 +57,7 @@ export class CreditCardsComponent implements OnInit {
     this.creditCardService.deleteCreditCard(this.creditCardId).subscribe(() => {
       this.closeDeleteModal()
       this.listCards()
-      this.snackBarService.open('Exclusão de cartão concluida','Fechar' ,{ verticalPosition: 'top', duration: 3000 });
+      this.snackBarService.open('Exclusão de cartão concluida','Fechar',{ verticalPosition: 'top', duration: 3000 });
     })
   }
 
@@ -92,8 +92,8 @@ export class CreditCardsComponent implements OnInit {
   initFormGroup() {
     this.formCreateCard =  this.fb.group({
       name: ['', [Validators.required, Validators.maxLength(50)]],
-      closingDay: ['', [Validators.required , Validators.maxLength(31), Validators.minLength(1)]],
-      dueDay: ['', [Validators.required , Validators.maxLength(31), Validators.minLength(1)]]
+      closingDay: ['', [Validators.required, Validators.min(1), Validators.max(30)]],
+      dueDay: ['', [Validators.required, Validators.min(1), Validators.max(30)]]
     })
   }
 
@@ -101,7 +101,6 @@ export class CreditCardsComponent implements OnInit {
     this.creditCardService.getCreditCards().subscribe({
       next: (responseCreditCards) => {
         this.creditCards = responseCreditCards
-
       }
     })
   }
