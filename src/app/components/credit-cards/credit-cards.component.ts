@@ -10,7 +10,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   styleUrls: ['./credit-cards.component.scss']
 })
 export class CreditCardsComponent implements OnInit {
-  public formCreateCard:FormGroup
+  public creditCardFormGroup:FormGroup
   public creditCardId = ''
 
   constructor(
@@ -26,49 +26,50 @@ export class CreditCardsComponent implements OnInit {
   private createCardDialogRef: MatDialogRef<any, any>;
   
   ngOnInit() {
-    this.listCards()
-    this.initFormGroup()
+    this.listCards();
+    this.initFormGroup();
   }
   
   createCreditCard(){
-    if(this.formCreateCard.valid) {
-      const creditCard = this.formCreateCard.value as CreditCard;
+    if(this.creditCardFormGroup.valid) {
+      const creditCard = this.creditCardFormGroup.value as CreditCard;
       this.creditCardService.createCreditCard(creditCard).subscribe((createdCard) => {
         this.createCardDialogRef.close();
-        this.listCards()
-        this.snackBarService.open('Criação de cartão concluida','Fechar',{ verticalPosition: 'top', duration: 3000 });
-      })
+        this.listCards();
+        this.snackBarService.open('Criação de cartão concluida','Fechar', { verticalPosition: 'top', duration: 3000 });
+      });
     }
   }
 
   updateCreditCard() {
-    if(this.formCreateCard.valid) {
-      const creditCard = this.formCreateCard.value as CreditCard;
-      creditCard._id = this.creditCardId
+    if(this.creditCardFormGroup.valid) {
+      const creditCard = this.creditCardFormGroup.value as CreditCard;
+      creditCard._id = this.creditCardId;
       this.creditCardService.updateCreditCard(creditCard).subscribe((createdCard) => {
         this.createCardDialogRef.close();
-        this.listCards()
+        this.listCards();
         this.snackBarService.open('Atualização de cartão concluida','Fechar',{ verticalPosition: 'top', duration: 3000 });
-      })
+      });
     }
   }
 
   deleteCreditCard() {
     this.creditCardService.deleteCreditCard(this.creditCardId).subscribe(() => {
-      this.closeDeleteModal()
-      this.listCards()
-      this.snackBarService.open('Exclusão de cartão concluida','Fechar',{ verticalPosition: 'top', duration: 3000 });
+      this.closeDeleteModal();
+      this.listCards();
+      this.snackBarService.open('Exclusão de cartão concluida','Fechar', { verticalPosition: 'top', duration: 3000 });
     })
   }
 
   openModal() {
-    this.creditCardId = null
+    this.creditCardId = null;
+    this.creditCardFormGroup.reset();
     this.createCardDialogRef = this.dialog.open(this.createCardRef);
   }
 
   openEditModal(card:CreditCard) {
     this.creditCardId = card._id
-    this.formCreateCard.patchValue({
+    this.creditCardFormGroup.patchValue({
       name: card.name,
       dueDay: card.dueDay,
       closingDay: card.closingDay
@@ -77,7 +78,7 @@ export class CreditCardsComponent implements OnInit {
   }
 
   openDeleteModal(creditCardId:string){
-    this.creditCardId = creditCardId
+    this.creditCardId = creditCardId;
     this.createCardDialogRef = this.dialog.open(this.deleteCardRef);
   }
 
@@ -86,15 +87,15 @@ export class CreditCardsComponent implements OnInit {
   }
 
   closeDeleteModal() {
-    this.createCardDialogRef.close(this.deleteCardRef)
+    this.createCardDialogRef.close(this.deleteCardRef);
   }
 
   initFormGroup() {
-    this.formCreateCard =  this.fb.group({
+    this.creditCardFormGroup =  this.fb.group({
       name: ['', [Validators.required, Validators.maxLength(50)]],
       closingDay: ['', [Validators.required, Validators.min(1), Validators.max(30)]],
       dueDay: ['', [Validators.required, Validators.min(1), Validators.max(30)]]
-    })
+    });
   }
 
   listCards() {
@@ -102,6 +103,6 @@ export class CreditCardsComponent implements OnInit {
       next: (responseCreditCards) => {
         this.creditCards = responseCreditCards
       }
-    })
+    });
   }
 }
