@@ -13,7 +13,7 @@
       <td>{{ card.dueDay }}</td>
       <td>{{ card.closingDay }}</td>
       <td>
-        <button mat-icon-button aria-label="Editar" color="primary" (click)="openEditModal(card._id)">
+        <button mat-icon-button aria-label="Editar" color="primary" (click)="openEditModal(card)">
           <mat-icon colo>edit</mat-icon>
         </button>
         <button mat-icon-button aria-label="Excluir" color="primary" (click)="openDeleteModal(card._id)">
@@ -41,7 +41,8 @@
   </mat-form-field>
 
   <div class="createCardButtonsDiv">
-    <button mat-raised-button color="primary" (click)="createCreditCard()">Adicionar</button>
+    <button *ngIf="!creditCardId" mat-raised-button color="primary" (click)="createCreditCard()">Adicionar</button>
+    <button *ngIf="creditCardId" mat-raised-button color="primary" (click)="updateCreditCard()">Atualizar</button>
     <button mat-raised-button color="secondary" (click)="closeModal()">Fechar</button>
   </div>
 

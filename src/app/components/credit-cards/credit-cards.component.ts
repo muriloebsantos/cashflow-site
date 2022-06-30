@@ -39,6 +39,17 @@ export class CreditCardsComponent implements OnInit {
     }
   }
 
+  updateCreditCard() {
+    if(this.formCreateCard.valid) {
+      const creditCard = this.formCreateCard.value as CreditCard;
+      creditCard._id = this.creditCardId
+      this.creditCardService.updateCreditCard(creditCard).subscribe((createdCard) => {
+        this.createCardDialogRef.close();
+        this.listCards()
+      })
+    }
+  }
+
   deleteCreditCard() {
     this.creditCardService.deleteCreditCard(this.creditCardId).subscribe(() => {
       this.listCards()
@@ -47,10 +58,12 @@ export class CreditCardsComponent implements OnInit {
   }
 
   openModal() {
+    this.creditCardId = null
     this.createCardDialogRef = this.dialog.open(this.createCardRef);
   }
 
-  openEditModal(card:any) {
+  openEditModal(card:CreditCard) {
+    this.creditCardId = card._id
     this.formCreateCard.patchValue({
       name: card.name,
       dueDay: card.dueDay,
