@@ -15,6 +15,7 @@ import { CreditCardService } from './core/services/credit-card.service';
 import { CurrencyMaskInputMode, NgxCurrencyModule } from "ngx-currency";
 import { TokenService } from './core/services/token.service';
 import { CreditCardsComponent } from './components/credit-cards/credit-cards.component';
+import { SignUpComponent } from './components/sign-up/sign-up.component';
 
 export const customCurrencyMaskConfig = {
   align: "left",
@@ -37,7 +38,8 @@ export const customCurrencyMaskConfig = {
     AppComponent,
     LoginComponent,
     CashflowComponent,
-    CreditCardsComponent
+    CreditCardsComponent,
+    SignUpComponent
   ],
   imports: [
     BrowserModule,

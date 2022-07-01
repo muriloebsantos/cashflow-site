@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TokenService } from 'src/app/core/services/token.service';
 import { sha512 } from 'js-sha512';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-login',
@@ -15,10 +16,13 @@ export class LoginComponent implements OnInit {
 
   constructor(private fb: FormBuilder,
               private tokenService: TokenService,
-              private router: Router
-    
-    ) { }
+              private router: Router,
+              private dialog: MatDialog,
+              ) { }
 
+  @ViewChild("createUserTeplate") createSignUpCardRef: TemplateRef<any>;
+  private createCardDialogRef: MatDialogRef<any, any>;
+              
   ngOnInit() {
     this.formGroup = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
@@ -43,5 +47,11 @@ export class LoginComponent implements OnInit {
         this.router.navigate(['']);
       }
     });
+  }
+
+  openSignUpModal() {
+    this.createCardDialogRef = this.dialog.open(this.createSignUpCardRef,{
+      width: "500px"
+    })
   }
 }
