@@ -22,6 +22,12 @@ export class HttpService {
         );
     }
 
+    protected post<T>(path: string, body: any) : Observable<T> {
+        return this.httpClient.post<T>(
+            environment.api + path, body
+        );
+    }
+
     protected putAuthenticated<T>(path: string, body: any) : Observable<T> {
         return this.httpClient.put<T>(
             environment.api + path, body, this.getAuthOptions()

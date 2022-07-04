@@ -18,4 +18,8 @@ export class UserService extends HttpService {
     public updateBalance(newBalance: number): Observable<any> {
         return this.postAuthenticated<User>('/me/balance-adjustment', { newBalance });
     }
+
+    public createUser(userData:object):Observable<any> {
+        return this.post<any>('/users', userData)
+    }
 }

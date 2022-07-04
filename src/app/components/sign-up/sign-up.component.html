@@ -1,0 +1,28 @@
+<div class="container" [formGroup]="formGroup">
+  <div class="row">
+    <div class="col-md-12">
+
+        <mat-form-field>
+          <mat-label>Nome do Usuario</mat-label>
+          <input matInput type="text" placeholder="Nome" formControlName="userName">
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>E-mail</mat-label>
+          <input matInput type="email" placeholder="E-mail" formControlName="email">
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Senha</mat-label>
+          <input matInput type="password" placeholder="Senha" formControlName="password">
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Confirme a Senha</mat-label>
+          <input matInput type="password" placeholder="Confirme a Senha" formControlName="confirmPassword">
+        </mat-form-field>
+
+        <button mat-raised-button color="primary" (click)="createAcount()">Criar Conta</button>
+    </div>
+  </div>
+</div>
