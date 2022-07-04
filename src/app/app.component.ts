@@ -13,7 +13,6 @@ export class AppComponent implements OnInit {
   ngOnInit() {
   }
 
-
   logoutSystem() {
     localStorage.clear()
     this.router.navigate(['/login'])
