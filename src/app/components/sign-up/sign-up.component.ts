@@ -51,7 +51,7 @@ export class SignUpComponent implements OnInit {
         this.router.navigate(['']);
       },
       error: (errorResponse: HttpErrorResponse) => {
-        if(errorResponse.status === 400 || errorResponse.status === 409){
+        if(errorResponse.status === 400 || errorResponse.status === 409) {
           this.snackBarService.open(errorResponse.error.error,'Fechar', { verticalPosition: 'top', duration: 3000 });
         }
       }
