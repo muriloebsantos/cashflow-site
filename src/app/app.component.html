@@ -1,6 +1,10 @@
 <mat-toolbar color="primary">
   <mat-toolbar-row>
-  <span>CashFlow</span>
+    <span>CashFlow</span>
+    <span class="example-spacer"></span>
+    <button  *ngIf="isLoggedIn()" (click)="logoutSystem()" mat-icon-button class="example-icon favorite-icon" aria-label="Sair do Sistema">
+      <mat-icon>logout</mat-icon>
+    </button>
   </mat-toolbar-row>
 </mat-toolbar>
 
