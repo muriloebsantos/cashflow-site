@@ -20,6 +20,7 @@ export class UserService extends HttpService {
     }
 
     public createUser(userData:object):Observable<any> {
-        return this.postAuthenticated<any>('/users', userData)
+        return this.post<any>('/users', userData)
     }
+
 }

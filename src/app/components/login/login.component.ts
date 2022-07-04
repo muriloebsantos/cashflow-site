@@ -2,7 +2,6 @@ import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TokenService } from 'src/app/core/services/token.service';
-import { sha512 } from 'js-sha512';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
@@ -38,9 +37,9 @@ export class LoginComponent implements OnInit {
     }
 
     const email = this.formGroup.value.email;
-    const hash = sha512(this.formGroup.value.password);
+    const password = this.formGroup.value.password;
 
-    this.tokenService.createToken(email, hash).subscribe({
+    this.tokenService.createToken(email, password).subscribe({
       next: response => {
         localStorage.setItem("cashflow_token", response.token);
         localStorage.setItem("exp", response.expiration);
@@ -53,5 +52,9 @@ export class LoginComponent implements OnInit {
     this.createCardDialogRef = this.dialog.open(this.createSignUpCardRef,{
       width: "500px"
     })
+  }
+
+  closeSignUpModal() {
+    this.createCardDialogRef.close();
   }
 }

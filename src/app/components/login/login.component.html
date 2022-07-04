@@ -15,12 +15,12 @@
       </div>
       <div class="row">
         <button mat-raised-button color="primary" (click)="login()">Entrar</button>
-        <button mat-flat-button style="margin-top: 8px" color="secondary" (click)="openSignUpModal()">Não é um Usuario, Registre-se</button>
+        <button mat-flat-button style="margin-top: 8px" color="secondary" (click)="openSignUpModal()">Não é um Usuario? Registre-se</button>
       </div>
     </div>
   </div>
 </div>
 
 <ng-template #createUserTeplate>
-  <app-sign-up></app-sign-up>
+  <app-sign-up (onUserCreated)="closeSignUpModal()"></app-sign-up>
 </ng-template>
