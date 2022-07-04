@@ -10,6 +10,7 @@ import { FormBuilder, FormGroup, FormGroupDirective, Validators } from '@angular
 import * as moment from 'moment';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { monthsNames } from 'src/app/core/months';
 
 interface EntriesByMonth {
   monthDescription: string;
@@ -49,9 +50,7 @@ export class CashflowComponent implements OnInit {
   public cardEntries: Entry[];
   public entryToEdit: Entry;
 
-  private monthsNames = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
-                         'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
-                        ];
+ 
 
   private entryToDelete: Entry;
 
@@ -146,7 +145,7 @@ export class CashflowComponent implements OnInit {
       const year = date.getFullYear();
 
       this.entriesByMonth.push({
-        monthDescription: `${this.monthsNames[month]} ${year}`,
+        monthDescription: `${monthsNames[month]} ${year}`,
         month: month,
         year: year,
         entries: [],

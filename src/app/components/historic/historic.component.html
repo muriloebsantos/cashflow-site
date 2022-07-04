@@ -1,0 +1,62 @@
+<div id="loadMoreDiv" class="row">
+    <button mat-raised-button color="primary" (click)="loadMoreEntries()">Carregar mais</button>
+</div>
+<div *ngFor="let month of entriesByMonth" class="row">
+    <div class="col" *ngIf="month.month >= 0 || month.entries.length > 0">
+     <h3>{{month.monthDescription}}</h3>
+
+     <table class="table table-striped">
+        <thead>
+            <th>Data</th>
+            <th>Descrição</th>
+            <th>Valor</th>
+            <th>Ações</th>
+        </thead>
+        <tbody>
+            <tr *ngFor="let entry of month.entries">
+               <td> {{entry.dueDate | date : 'dd/MM/yyyy'}} </td>
+               <td>
+                  <button *ngIf="entry.creditCardId" mat-icon-button color="primary" aria-label="Example icon button with a home icon">
+                     <mat-icon *ngIf="entry.creditCardId" class="credit_card" (click)="openCardDetails(entry.entries)">credit_card</mat-icon>
+                   </button>
+                   {{entry.description}}
+                   <span *ngIf="entry.showRecurrenceNumber">({{entry.recurrenceNumber}}/{{entry.recurrenceTotal}})</span>
+               </td>
+               <td [style.color]="entry.type === 'C' ? 'blue' : 'red'">
+                 {{entry.value | currency: 'BRL'}}  {{entry.type}}
+               </td>
+               <td>
+                   <button *ngIf="!entry.creditCardId" (click)="openDeleteDialog(entry)" mat-icon-button aria-label="Excluir" color="primary">
+                     <mat-icon colo>delete</mat-icon>
+                   </button>
+               </td>
+            </tr>
+            <tr *ngIf="month.entries.length === 0">
+                 <td colspan="6">Nenhum registro encontrado</td>
+            </tr>
+        </tbody>
+        <tfoot>
+         <tr>
+             <td>Entradas mês</td>
+             <td></td>
+             <td colspan="4" [style.color]='blue'>
+                 {{month.totalMonth | currency: 'BRL'}}
+             </td>
+         </tr>
+         <tr>
+            <td>Saidas mês</td>
+            <td></td>
+            <td colspan="4" [style.color]='red'>
+                {{month.totalMonth | currency: 'BRL'}}
+            </td>
+        </tr>
+        <tr>
+            <td>Saldo mês</td>
+            <td></td>
+            <td colspan="4" [style.color]="month.totalMonth >= 0 ? 'blue' : 'red'">
+                {{month.totalMonth | currency: 'BRL'}}
+            </td>
+        </tr>
+     </tfoot>
+     </table>
+    </div>
