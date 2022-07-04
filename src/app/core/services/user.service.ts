@@ -22,5 +22,4 @@ export class UserService extends HttpService {
     public createUser(userData:object):Observable<any> {
         return this.post<any>('/users', userData)
     }
-
 }
