@@ -17,6 +17,7 @@ import { TokenService } from './core/services/token.service';
 import { CreditCardsComponent } from './components/credit-cards/credit-cards.component';
 import { SignUpComponent } from './components/sign-up/sign-up.component';
 import { HistoricComponent } from './components/historic/historic.component';
+import { NgHttpLoaderModule } from 'ng-http-loader';
 
 export const customCurrencyMaskConfig = {
   align: "left",
@@ -41,7 +42,7 @@ export const customCurrencyMaskConfig = {
     CashflowComponent,
     CreditCardsComponent,
     SignUpComponent,
-    HistoricComponent
+    HistoricComponent,
   ],
   imports: [
     BrowserModule,
@@ -50,7 +51,8 @@ export const customCurrencyMaskConfig = {
     MaterialModule,
     HttpClientModule,
     ReactiveFormsModule,
-    NgxCurrencyModule.forRoot(customCurrencyMaskConfig)
+    NgxCurrencyModule.forRoot(customCurrencyMaskConfig),
+    NgHttpLoaderModule.forRoot()
   ],
   providers: [AuthGuardService, UserService, EntryService, CreditCardService, TokenService],
   bootstrap: [AppComponent]
