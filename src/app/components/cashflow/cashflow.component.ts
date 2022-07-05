@@ -261,9 +261,15 @@ export class CashflowComponent implements OnInit {
     if(!this.formGroup.valid) {
       return;
     }
-
+    
     const entryRequest = this.formGroup.value as Entry;
     const invoiceDate = this.formGroup.value.invoice;
+
+    if(this.formGroup.value.recurrenceNumber > 360){
+      this.formGroup.controls['recurrenceNumber'].setErrors({'incorrect': true});
+      this.snackBarService.open('Recorrência maior que 360, inválido', 'Fechar', { verticalPosition: 'top', duration: 3000 });
+      return;
+    }
 
     if(entryRequest.creditCardId && !invoiceDate) {
       this.formGroup.controls['invoice'].setErrors({'incorrect': true});
