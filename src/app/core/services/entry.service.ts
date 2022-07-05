@@ -11,6 +11,10 @@ export class EntryService extends HttpService {
         super(http);
     }
 
+    public getEntries(initialDate:Date, endDate:Date): Observable<Entry[]> {
+        return this.getAuthenticated<Entry[]>(`/entries?initDate=${initialDate.toISOString()}&endDate=${endDate.toISOString()}`)
+    }
+
     public getPendingEntries(month: number, year: number, includeOverdue: number): Observable<Entry[]> {
         return this.getAuthenticated<Entry[]>(`/entries/pending?month=${month}&year=${year}&includeOverdue=${includeOverdue}`);
     }
