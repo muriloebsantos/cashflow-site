@@ -39,22 +39,22 @@
          <tr>
              <td>Entradas mês</td>
              <td></td>
-             <td colspan="4" [style.color]='blue'>
-                 {{month.totalMonth | currency: 'BRL'}}
+             <td colspan="4" [style.color]="'blue'">
+                 {{month.totalCredit | currency: 'BRL'}}
              </td>
          </tr>
          <tr>
             <td>Saidas mês</td>
             <td></td>
-            <td colspan="4" [style.color]='red'>
-                {{month.totalMonth | currency: 'BRL'}}
+            <td colspan="4" [style.color]="'red'">
+                {{month.totalDebit | currency: 'BRL'}}
             </td>
         </tr>
         <tr>
             <td>Saldo mês</td>
             <td></td>
-            <td colspan="4" [style.color]="month.totalMonth >= 0 ? 'blue' : 'red'">
-                {{month.totalMonth | currency: 'BRL'}}
+            <td colspan="4" [style.color]="month.balance>= 0 ? 'blue' : 'red'">
+                {{month.balance | currency: 'BRL'}}
             </td>
         </tr>
      </tfoot>

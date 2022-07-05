@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { CreditCard } from 'src/app/core/models/credit-card';
 import { Entry } from 'src/app/core/models/entry';
 import { monthsNames } from 'src/app/core/months';
+import { CreditCardService } from 'src/app/core/services/credit-card.service';
 import { EntryService } from 'src/app/core/services/entry.service';
 
 interface EntriesByMonth {
@@ -21,49 +23,94 @@ interface EntriesByMonth {
 export class HistoricComponent implements OnInit {
 
   constructor(
-    private entriesService: EntryService
+    private entriesService: EntryService,
+    private creditCardService: CreditCardService
   ) { }
 
   public entriesByMonth: EntriesByMonth[] = [];
   public date: Date = new Date();
+  public creditCards: CreditCard[] = [];
 
-  ngOnInit() {
+  async ngOnInit() {
     this.date.setDate(1);
+    await this.getCreditCards();
     this.getEntries();
   }
 
+  async getCreditCards() {
+    this.creditCards = await this.creditCardService.getCreditCards().toPromise();
+  }
   getEntries() {
     const date = new Date(this.date);
- 
-     for(let i = 0; i < 3; i++) {
-       const month = date.getMonth();
-       const year = date.getFullYear();
- 
-       this.entriesByMonth.unshift({
-         monthDescription: `${monthsNames[month]} ${year}`,
-         month: month,
-         year: year,
-         entries: [],
-         totalCredit: 0,
-         totalDebit: 0,
-         balance: 0
-       });
- 
-       date.setMonth(month - 1);
-     }
 
-     const initDate = new Date(date);
-     initDate.setMonth(initDate.getMonth() + 1);
-     initDate.setHours(0, 0, 0, 0);
+    for (let i = 0; i < 3; i++) {
+      const month = date.getMonth();
+      const year = date.getFullYear();
 
-     const endDate = new Date(this.date.getFullYear(), this.date.getMonth() + 1, 0);
-     endDate.setHours(23, 59, 59, 999);
+      this.entriesByMonth.unshift({
+        monthDescription: `${monthsNames[month]} ${year}`,
+        month: month,
+        year: year,
+        entries: [],
+        totalCredit: 0,
+        totalDebit: 0,
+        balance: 0
+      });
 
-     this.entriesService.getEntries(initDate, endDate).subscribe({ 
-       next: entries => {
+      date.setMonth(month - 1);
+    }
 
-       }
-     });
+    const initDate = new Date(date);
+    initDate.setMonth(initDate.getMonth() + 1);
+    initDate.setHours(0, 0, 0, 0);
+
+    const endDate = new Date(this.date.getFullYear(), this.date.getMonth() + 1, 0);
+    endDate.setHours(23, 59, 59, 999);
+    this.entriesService.getEntries(initDate, endDate).subscribe({
+      next: entries => {
+        for (let newEntry of entries) {
+          const dueDate = new Date(newEntry.dueDate);
+          const entryMonth = dueDate.getMonth();
+          const entryYear = dueDate.getFullYear();
+          const entryByMonth = this.entriesByMonth.find(e => e.month === entryMonth && e.year === entryYear);
+
+          if (!entryByMonth)
+            continue;
+
+          if (!newEntry.creditCardId) {
+            entryByMonth.entries.push(newEntry);
+          } else {
+            let entry = entryByMonth.entries.find(e => e.creditCardId === newEntry.creditCardId && e.dueDate === newEntry.dueDate);
+
+            if (!entry) {
+              entry = {
+                dueDate: newEntry.dueDate,
+                description: this.creditCards.find(c => c._id === newEntry.creditCardId).name,
+                type: 'D',
+                value: newEntry.value,
+                creditCardId: newEntry.creditCardId,
+                entries: []
+              };
+
+              entryByMonth.entries.push(entry);
+            } else {
+              entry.value += newEntry.value;
+            }
+          }
+          
+          let value = newEntry.value
+          let typeOfValue = newEntry.type
+
+          if (typeOfValue === 'C') {
+            entryByMonth.totalCredit += value;
+          } else {
+            entryByMonth.totalDebit += value;
+          }
+
+          entryByMonth.balance = entryByMonth.totalCredit - entryByMonth.totalDebit;
+        }
+      }
+    });
   }
 
   loadMoreEntries() {
