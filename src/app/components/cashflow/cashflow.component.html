@@ -78,7 +78,7 @@
             </mat-tab>
 
             <mat-tab label="Historico de Lançamentos">
-                <app-historic></app-historic>
+                <app-historic (onEntriesChanged)="refresh()"></app-historic>
             </mat-tab>
 
             <mat-tab label="Novo lançamento">

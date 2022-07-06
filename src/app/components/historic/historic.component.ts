@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { CreditCard } from 'src/app/core/models/credit-card';
 import { Entry } from 'src/app/core/models/entry';
 import { monthsNames } from 'src/app/core/months';
@@ -22,10 +24,19 @@ interface EntriesByMonth {
 })
 export class HistoricComponent implements OnInit {
 
+  @Output() public onEntriesChanged = new EventEmitter<any>();
+  
+  private dialogRef: MatDialogRef<any, any>;
+  private entryToDelete: Entry;
   constructor(
     private entriesService: EntryService,
-    private creditCardService: CreditCardService
-  ) { }
+    private creditCardService: CreditCardService,
+    private snackBarService: MatSnackBar,
+    private dialog: MatDialog
+    ) { }
+
+  @ViewChild("deleteManyDialogRef") deleteManyDialogRef: TemplateRef<any>;
+
 
   public entriesByMonth: EntriesByMonth[] = [];
   public date: Date = new Date();
@@ -117,4 +128,58 @@ export class HistoricComponent implements OnInit {
     this.date.setMonth(this.date.getMonth() - 3);
     this.getEntries()
   }
+
+  openDeleteDialog(entry: Entry) {
+    this.dialogRef = this.dialog.open(this.deleteManyDialogRef);
+    this.entryToDelete = entry;
+  }
+
+  closeDeleteDialog() {
+    this.dialogRef.close();
+  }
+
+  delete(deleteAll: number) {
+    this.entriesService.delete(this.entryToDelete._id, deleteAll).subscribe({
+      next: () => {
+        this.snackBarService.open('Excluído com sucesso', 'Fechar', { verticalPosition: 'top', duration: 3000 });
+        this.removeEntriesFromView(this.entryToDelete, deleteAll);
+        this.dialog.closeAll();
+        this.onEntriesChanged.emit();
+      }, 
+      error: () => {
+        this.snackBarService.open('Erro ao excluir', 'Fechar', { verticalPosition: 'top', duration: 3000 });
+      }
+    })
+  }
+
+  removeEntriesFromView(entry:Entry, deleteAll:number) {
+    if (deleteAll === 1) {
+      for (let monthData of this.entriesByMonth) {
+        monthData.entries = monthData.entries.filter(e => e.recurrenceId != entry.recurrenceId);
+      }
+    } else {
+      for (let monthData of this.entriesByMonth) {
+        monthData.entries = monthData.entries.filter(e => e._id != entry._id);
+      }
+    }
+    this.recaulculateBalance();
+  }
+
+  recaulculateBalance() {
+    for (let monthData of this.entriesByMonth) {
+      monthData.totalCredit = 0;
+      monthData.totalDebit = 0;
+      monthData.balance = 0;
+      for (let entry of monthData.entries) {
+        if (entry.type == 'C') {
+          monthData.totalCredit += entry.value;
+          monthData.balance += entry.value;
+        } else {
+          monthData.totalDebit += entry.value;
+          monthData.balance -= entry.value;
+        }
+      }
+    }
+  }
+
 }
