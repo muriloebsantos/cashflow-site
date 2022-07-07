@@ -29,9 +29,9 @@
                            <tr *ngFor="let entry of month.entries">
                               <td> {{entry.dueDate | date : 'dd/MM/yyyy'}} </td>
                               <td>
-                                 <button *ngIf="entry.creditCardId" mat-icon-button color="primary" aria-label="Example icon button with a home icon">
+                                <button *ngIf="entry.creditCardId" mat-icon-button color="primary" aria-label="Example icon button with a home icon">
                                     <mat-icon *ngIf="entry.creditCardId" class="credit_card" (click)="openCardDetails(entry.entries)">credit_card</mat-icon>
-                                  </button>
+                                </button>
                                   {{entry.description}}
                                   <span *ngIf="entry.showRecurrenceNumber">({{entry.recurrenceNumber}}/{{entry.recurrenceTotal}})</span>
                               </td>

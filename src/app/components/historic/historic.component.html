@@ -66,5 +66,42 @@
         <p>Deseja excluir o registro?</p>
         <button mat-raised-button color="primary" class="dialog-button" (click)="delete(0)">Sim, excluir apenas esse</button>
         <button mat-raised-button color="warn" class="dialog-button" (click)="delete(1)">Sim, excluir todos</button>
-        <button mat-raised-button color="secondary" class="dialog-button" (click)="closeDeleteDialog()">Não, fechar</button>
+        <button mat-raised-button color="secondary" class="dialog-button" (click)="closeDialog()">Não, fechar</button>
+    </ng-template>
+    
+    <ng-template #creditCardDetailsRef>
+        <mat-dialog-content> 
+            <div class="row">
+                <div class="col">
+                    <table class="table table-striped">
+                        <thead>
+                            <th>Data</th>
+                            <th>Descrição</th>
+                            <th>Valor</th>
+                            <th **ngIf="false">Ações</th>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let entry of cardEntries">
+                                <td>{{entry.purchaseDate | date: 'dd/MM/yyyy'}}</td>
+                                <td>
+                                    {{entry.description}}
+                                    <span *ngIf="entry.showRecurrenceNumber">({{entry.recurrenceNumber}}/{{entry.recurrenceTotal}})</span>
+                                </td>
+                                <td>{{entry.value | currency: 'BRL'}}</td>
+                                <td *ngIf="false">
+                                    <button (click)="openEditEntry(entry)" mat-icon-button aria-label="Editar" color="primary">
+                                        <mat-icon colo>edit</mat-icon>
+                                    </button>
+                                    <button (click)="openDeleteDialog(entry)" mat-icon-button aria-label="Excluir" color="primary">
+                                        <mat-icon colo>delete</mat-icon>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+    
+            <button style="float: right;" mat-raised-button color="secondary" class="dialog-button" (click)="closeCardDetailsDialog()">Fechar</button>
+        </mat-dialog-content> 
     </ng-template>

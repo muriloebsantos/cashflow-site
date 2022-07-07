@@ -25,7 +25,8 @@ interface EntriesByMonth {
 export class HistoricComponent implements OnInit {
 
   @Output() public onEntriesChanged = new EventEmitter<any>();
-  
+
+  private creditCardDetailsDialogRef: MatDialogRef<any, any>;
   private dialogRef: MatDialogRef<any, any>;
   private entryToDelete: Entry;
   constructor(
@@ -36,8 +37,8 @@ export class HistoricComponent implements OnInit {
     ) { }
 
   @ViewChild("deleteManyDialogRef") deleteManyDialogRef: TemplateRef<any>;
-
-
+  @ViewChild("creditCardDetailsRef") creditCardDetailsRef: TemplateRef<any>;
+  public cardEntries: Entry[];
   public entriesByMonth: EntriesByMonth[] = [];
   public date: Date = new Date();
   public creditCards: CreditCard[] = [];
@@ -102,15 +103,15 @@ export class HistoricComponent implements OnInit {
                 creditCardId: newEntry.creditCardId,
                 entries: []
               };
-
               entryByMonth.entries.push(entry);
             } else {
               entry.value += newEntry.value;
             }
+            entry.entries.push(newEntry);
           }
           
-          let value = newEntry.value
-          let typeOfValue = newEntry.type
+          let value = newEntry.value;
+          let typeOfValue = newEntry.type;
 
           if (typeOfValue === 'C') {
             entryByMonth.totalCredit += value;
@@ -126,7 +127,12 @@ export class HistoricComponent implements OnInit {
 
   loadMoreEntries() {
     this.date.setMonth(this.date.getMonth() - 3);
-    this.getEntries()
+    this.getEntries();
+  }
+
+  openCardDetails(entries: Entry[]) {
+    this.cardEntries = entries;
+    this.creditCardDetailsDialogRef = this.dialog.open(this.creditCardDetailsRef);
   }
 
   openDeleteDialog(entry: Entry) {
@@ -134,8 +140,12 @@ export class HistoricComponent implements OnInit {
     this.entryToDelete = entry;
   }
 
-  closeDeleteDialog() {
+  closeDialog() {
     this.dialogRef.close();
+  }
+
+  closeCardDetailsDialog() {
+    this.creditCardDetailsDialogRef.close();
   }
 
   delete(deleteAll: number) {
@@ -181,5 +191,4 @@ export class HistoricComponent implements OnInit {
       }
     }
   }
-
 }
