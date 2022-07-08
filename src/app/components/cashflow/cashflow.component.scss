@@ -22,3 +22,35 @@
 .edit-balance {
     margin-top: -8px;
 }
+
+.header {
+    font-weight: 900;
+    border-bottom: 2px #eee solid ;
+    margin-bottom: 10px;
+    @media screen and (max-width: 1020px) {
+        display: none;
+    }
+}
+
+.row-entry{
+    &:nth-child(even){
+        background: rgba(0, 0, 0, 0.05);
+    }
+    display: flex;
+    flex-shrink: 0;
+    flex-grow: 0;
+    align-items: center;
+    @media screen and (max-width: 1020px) {
+        margin-bottom: 10px;
+        padding-top: 5px;
+    }
+    margin-left: 5px;
+}
+
+.label-mobile{
+    font-weight: 900;
+    @media screen and (min-width: 1020px) {
+        display: none;
+    }
+    color: #000;
+}

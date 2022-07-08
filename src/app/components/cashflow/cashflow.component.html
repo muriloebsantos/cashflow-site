@@ -16,59 +16,55 @@
                    <div class="col" *ngIf="month.month >= 0 || month.entries.length > 0">
                     <h3>{{month.monthDescription}}</h3>
 
-                    <table class="table table-striped">
-                       <thead>
-                           <th>Data</th>
-                           <th>Descrição</th>
-                           <th>Valor</th>
-                           <th>Previsão</th>
-                           <th>Efetivar</th>
-                           <th>Ações</th>
-                       </thead>
-                       <tbody>
-                           <tr *ngFor="let entry of month.entries">
-                              <td> {{entry.dueDate | date : 'dd/MM/yyyy'}} </td>
-                              <td>
-                                <button *ngIf="entry.creditCardId" mat-icon-button color="primary" aria-label="Example icon button with a home icon">
-                                    <mat-icon *ngIf="entry.creditCardId" class="credit_card" (click)="openCardDetails(entry.entries)">credit_card</mat-icon>
-                                </button>
-                                  {{entry.description}}
-                                  <span *ngIf="entry.showRecurrenceNumber">({{entry.recurrenceNumber}}/{{entry.recurrenceTotal}})</span>
-                              </td>
-                              <td [style.color]="entry.type === 'C' ? 'blue' : 'red'">
-                                {{entry.value | currency: 'BRL'}}  {{entry.type}}
-                              </td>
-                              <td [style.color]="entry.prevision >= 0 ? 'blue' : 'red'">
-                                {{entry.prevision | currency: 'BRL'}}
-                              </td>
-                              <td>
-                                <button mat-icon-button aria-label="Efetivar" color="primary" (click)="commitEntry(entry, month)">
-                                    <mat-icon colo>check_circle_outline</mat-icon>
-                                  </button>
-                              </td>
-                              <td>
-                                  <button *ngIf="!entry.creditCardId" (click)="openEditEntry(entry)" mat-icon-button aria-label="Editar" color="primary">
-                                    <mat-icon colo>edit</mat-icon>
-                                  </button>
-                                  <button *ngIf="!entry.creditCardId" (click)="openDeleteDialog(entry)" mat-icon-button aria-label="Excluir" color="primary">
-                                    <mat-icon colo>delete</mat-icon>
-                                  </button>
-                              </td>
-                           </tr>
-                           <tr *ngIf="month.entries.length === 0">
-                                <td colspan="6">Nenhum registro encontrado</td>
-                           </tr>
-                       </tbody>
-                       <tfoot>
-                        <tr>
-                            <td>Total mês</td>
-                            <td></td>
-                            <td colspan="4" [style.color]="month.totalMonth >= 0 ? 'blue' : 'red'">
-                                {{month.totalMonth | currency: 'BRL'}}
-                            </td>
-                        </tr>
-                    </tfoot>
-                    </table>
+                    <div>
+                        <div class="row header">
+                            <div class="col-md-2">Data</div>
+                            <div class="col-md-4">Descrição</div>
+                            <div class="col-md-2">Valor</div>
+                            <div class="col-md-2">Previsão</div>
+                            <div class="col-md-1">Efetivar</div>
+                            <div class="col-md-1">Ações</div>
+                        </div>
+                        <div class="body">
+                            <div class="row row-entry" *ngFor="let entry of month.entries">
+                                <div class="col-md-2">
+                                    <span class="label-mobile">Data:</span>
+                                    {{entry.dueDate | date : 'dd/MM/yyyy'}}
+                                </div>
+                                    <div class="col-md-4">
+                                    <span class="label-mobile">Descrição:</span>
+                                        <button *ngIf="entry.creditCardId" mat-icon-button color="primary" aria-label="Example icon button with a home icon">
+                                            <mat-icon *ngIf="entry.creditCardId" class="credit_card" (click)="openCardDetails(entry.entries)">credit_card</mat-icon>
+                                        </button>
+                                          {{entry.description}}
+                                          <span *ngIf="entry.showRecurrenceNumber">({{entry.recurrenceNumber}}/{{entry.recurrenceTotal}})</span>
+                                    </div>
+                                    <div class="col-md-2" [style.color]="entry.type === 'C' ? 'blue' : 'red'">
+                                        <span class="label-mobile">Valor:</span>
+                                        {{entry.value | currency: 'BRL'}}  {{entry.type}}
+                                    </div>
+                                    <div class="col-md-2"  [style.color]="entry.prevision >= 0 ? 'blue' : 'red'">
+                                        <span class="label-mobile">Previsão:</span>
+                                        {{entry.prevision | currency: 'BRL'}}
+                                    </div>
+                                    <div class="col-md-1">
+                                        <span class="label-mobile">Efetivar:</span>
+                                        <button mat-icon-button aria-label="Efetivar" color="primary" (click)="commitEntry(entry, month)">
+                                            <mat-icon colo>check_circle_outline</mat-icon>
+                                          </button>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <span class="label-mobile">Ações:</span>
+                                        <button *ngIf="!entry.creditCardId" (click)="openEditEntry(entry)" mat-icon-button aria-label="Editar" color="primary">
+                                            <mat-icon colo>edit</mat-icon>
+                                          </button>
+                                          <button *ngIf="!entry.creditCardId" (click)="openDeleteDialog(entry)" mat-icon-button aria-label="Excluir" color="primary">
+                                            <mat-icon colo>delete</mat-icon>
+                                          </button>
+                                    </div>
+                            </div>
+                        </div>
+                    </div>
                    </div>
                 </div>
 
@@ -190,19 +186,23 @@
                     </thead>
                     <tbody>
                         <tr *ngFor="let entry of cardEntries">
-                            <td>{{entry.purchaseDate | date: 'dd/MM/yyyy'}}</td>
                             <td>
-                                {{entry.description}}
-                                <span *ngIf="entry.showRecurrenceNumber">({{entry.recurrenceNumber}}/{{entry.recurrenceTotal}})</span>
-                            </td>
-                            <td>{{entry.value | currency: 'BRL'}}</td>
-                            <td>
-                                <button (click)="openEditEntry(entry)" mat-icon-button aria-label="Editar" color="primary">
-                                    <mat-icon colo>edit</mat-icon>
-                                </button>
-                                <button (click)="openDeleteDialog(entry)" mat-icon-button aria-label="Excluir" color="primary">
-                                    <mat-icon colo>delete</mat-icon>
-                                </button>
+                                <div class="row">
+                                    <div class="col">{{entry.purchaseDate | date: 'dd/MM/yyyy'}}</div>
+                                    <div class="col"> 
+                                        {{entry.description}}
+                                        <span *ngIf="entry.showRecurrenceNumber">({{entry.recurrenceNumber}}/{{entry.recurrenceTotal}})</span>
+                                    </div>
+                                    <div class="col">{{entry.value | currency: 'BRL'}}</div>
+                                    <div class="col">  <button (click)="openEditEntry(entry)" mat-icon-button aria-label="Editar" color="primary">
+                                        <mat-icon colo>edit</mat-icon>
+                                    </button>
+                                    <button (click)="openDeleteDialog(entry)" mat-icon-button aria-label="Excluir" color="primary">
+                                        <mat-icon colo>delete</mat-icon>
+                                    </button></div>
+                                    <div class="col"></div>
+                                    <div class="col"></div>
+                                </div>
                             </td>
                         </tr>
                     </tbody>
