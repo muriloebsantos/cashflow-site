@@ -1,6 +1,3 @@
-<div id="loadMoreDiv" class="row">
-    <button mat-raised-button color="primary" (click)="loadMoreEntries()">Carregar mais</button>
-</div>
 <div *ngFor="let month of entriesByMonth" class="row">
     <div class="col" *ngIf="month.month >= 0 || month.entries.length > 0">
      <h3>{{month.monthDescription}}</h3>
@@ -60,8 +57,10 @@
      </tfoot>
      </table>
     </div>
-
-
+    </div>
+    <div id="loadMoreDiv" class="row">
+        <button mat-raised-button color="primary" (click)="loadMoreEntries()">Carregar mais</button>
+    </div>
     <ng-template #deleteManyDialogRef>
         <p>Deseja excluir o registro?</p>
         <button mat-raised-button color="primary" class="dialog-button" (click)="delete(0)">Sim, excluir apenas esse</button>

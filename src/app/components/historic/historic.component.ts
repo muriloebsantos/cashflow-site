@@ -59,7 +59,7 @@ export class HistoricComponent implements OnInit {
       const month = date.getMonth();
       const year = date.getFullYear();
 
-      this.entriesByMonth.unshift({
+      this.entriesByMonth.push({
         monthDescription: `${monthsNames[month]} ${year}`,
         month: month,
         year: year,
@@ -103,7 +103,7 @@ export class HistoricComponent implements OnInit {
                 creditCardId: newEntry.creditCardId,
                 entries: []
               };
-              entryByMonth.entries.push(entry);
+              entryByMonth.entries.unshift(entry);
             } else {
               entry.value += newEntry.value;
             }
