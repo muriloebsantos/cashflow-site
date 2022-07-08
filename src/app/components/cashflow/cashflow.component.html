@@ -186,24 +186,22 @@
                     </thead>
                     <tbody>
                         <tr *ngFor="let entry of cardEntries">
-                            <td>
-                                <div class="row">
-                                    <div class="col">{{entry.purchaseDate | date: 'dd/MM/yyyy'}}</div>
-                                    <div class="col"> 
+                                    <td class="col">{{entry.purchaseDate | date: 'dd/MM/yyyy'}}</td>
+                                    <td class="col"> 
                                         {{entry.description}}
-                                        <span *ngIf="entry.showRecurrenceNumber">({{entry.recurrenceNumber}}/{{entry.recurrenceTotal}})</span>
-                                    </div>
-                                    <div class="col">{{entry.value | currency: 'BRL'}}</div>
-                                    <div class="col">  <button (click)="openEditEntry(entry)" mat-icon-button aria-label="Editar" color="primary">
-                                        <mat-icon colo>edit</mat-icon>
-                                    </button>
-                                    <button (click)="openDeleteDialog(entry)" mat-icon-button aria-label="Excluir" color="primary">
-                                        <mat-icon colo>delete</mat-icon>
-                                    </button></div>
-                                    <div class="col"></div>
-                                    <div class="col"></div>
-                                </div>
-                            </td>
+                                        <span *ngIf="entry.showRecurrenceNumber">({{entry.recurrenceNumber}}/{{entry.recurrenceTotal}})
+
+                                        </span>
+                                    </td>
+                                    <td class="col">{{entry.value | currency: 'BRL'}}</td>
+                                    <td class="col">
+                                        <button (click)="openEditEntry(entry)" mat-icon-button aria-label="Editar" color="primary">
+                                            <mat-icon colo>edit</mat-icon>
+                                        </button>
+                                        <button (click)="openDeleteDialog(entry)" mat-icon-button aria-label="Excluir" color="primary">
+                                            <mat-icon colo>delete</mat-icon>
+                                        </button>
+                                    </td>
                         </tr>
                     </tbody>
                 </table>

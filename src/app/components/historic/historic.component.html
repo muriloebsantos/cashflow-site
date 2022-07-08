@@ -2,60 +2,63 @@
     <div class="col" *ngIf="month.month >= 0 || month.entries.length > 0">
      <h3>{{month.monthDescription}}</h3>
 
-     <table class="table table-striped">
-        <thead>
-            <th>Data</th>
-            <th>Descrição</th>
-            <th>Valor</th>
-            <th>Ações</th>
-        </thead>
-        <tbody>
-            <tr *ngFor="let entry of month.entries">
-               <td> {{entry.dueDate | date : 'dd/MM/yyyy'}} </td>
-               <td>
-                  <button *ngIf="entry.creditCardId" mat-icon-button color="primary" aria-label="Example icon button with a home icon">
-                     <mat-icon *ngIf="entry.creditCardId" class="credit_card" (click)="openCardDetails(entry.entries)">credit_card</mat-icon>
-                   </button>
-                   {{entry.description}}
-                   <span *ngIf="entry.showRecurrenceNumber">({{entry.recurrenceNumber}}/{{entry.recurrenceTotal}})</span>
-               </td>
-               <td [style.color]="entry.type === 'C' ? 'blue' : 'red'">
-                 {{entry.value | currency: 'BRL'}}  {{entry.type}}
-               </td>
-               <td>
-                   <button *ngIf="!entry.creditCardId" (click)="openDeleteDialog(entry)" mat-icon-button aria-label="Excluir" color="primary">
-                     <mat-icon colo>delete</mat-icon>
-                   </button>
-               </td>
-            </tr>
-            <tr *ngIf="month.entries.length === 0">
-                 <td colspan="6">Nenhum registro encontrado</td>
-            </tr>
-        </tbody>
-        <tfoot>
-         <tr>
-             <td>Entradas mês</td>
-             <td></td>
-             <td colspan="4" [style.color]="'blue'">
+     <div>
+        <div class="row header">
+            <div class="col-md-3">Data</div>
+            <div class="col-md-4">Descrição</div>
+            <div class="col-md-4">Valor</div>
+            <div class="col-md-1">Ações</div>
+        </div>
+     </div>
+     <div class="body">
+        <div class=" row row-historic" *ngFor="let entry of month.entries">
+            <div class="col-md-3">
+                <span class="label-mobile">Data</span>
+                {{entry.dueDate | date : 'dd/MM/yyyy'}}</div>
+                <div class="col-md-4">
+                <span class="label-mobile">Descrição</span>
+                <button *ngIf="entry.creditCardId" mat-icon-button color="primary" aria-label="Example icon button with a home icon">
+                    <mat-icon *ngIf="entry.creditCardId" class="credit_card" (click)="openCardDetails(entry.entries)">credit_card</mat-icon>
+                </button>
+                {{entry.description}}
+                <span *ngIf="entry.showRecurrenceNumber">({{entry.recurrenceNumber}}/{{entry.recurrenceTotal}})</span>
+            </div>
+            <div class="col-md-4" [style.color]="entry.type === 'C' ? 'blue' : 'red'"> 
+                <span class="label-mobile">Valor</span>
+                {{entry.value | currency: 'BRL'}}  
+                {{entry.type}}
+            </div>
+            <div class="col-md-1">
+                <span class="label-mobile">Ações</span>
+                <button *ngIf="!entry.creditCardId" (click)="openDeleteDialog(entry)" mat-icon-button aria-label="Excluir" color="primary">
+                    <mat-icon colo>delete</mat-icon>
+                </button>
+            </div>
+        </div>
+        <div *ngIf="month.entries.length === 0">
+            Nenhum registro encontrado
+        </div>
+     </div>
+        <div class="footer">
+         <div>
+             <span class="show-footer">Entradas mês:</span>
+             <span [style.color]="'blue'">
                  {{month.totalCredit | currency: 'BRL'}}
-             </td>
-         </tr>
-         <tr>
-            <td>Saidas mês</td>
-            <td></td>
-            <td colspan="4" [style.color]="'red'">
+             </span>
+         </div>
+         <div>
+            <span class="show-footer">Saidas mês:</span>
+            <span [style.color]="'red'">
                 {{month.totalDebit | currency: 'BRL'}}
-            </td>
-        </tr>
-        <tr>
-            <td>Saldo mês</td>
-            <td></td>
-            <td colspan="4" [style.color]="month.balance>= 0 ? 'blue' : 'red'">
+            </span>
+        </div>
+        <div>
+            <span class="show-footer">Saldo mês:</span>
+            <span [style.color]="month.balance>= 0 ? 'blue' : 'red'">
                 {{month.balance | currency: 'BRL'}}
-            </td>
-        </tr>
-     </tfoot>
-     </table>
+            </span>
+        </div>
+     </div>
     </div>
     </div>
     <div id="loadMoreDiv" class="row">
