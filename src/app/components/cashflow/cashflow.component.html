@@ -1,7 +1,7 @@
 <div id="main" class="row">
     <div class="row">
-        <div class="col-sm-2">
-            <strong>Saldo Atual: </strong>
+        <div class="col-sm-6">
+            <strong>Saldo Conta Corrente: </strong>
             <span *ngIf="!isGettingBalance">{{balance | currency : 'BRL'}}</span>
             <button *ngIf="!isGettingBalance" (click)="openEditBalance()" mat-icon-button aria-label="Editar" color="primary">
                 <mat-icon class="edit-balance">edit</mat-icon>
@@ -10,8 +10,18 @@
         </div>
     </div>
     <div class="row">
+        <div class="col-sm-6">
+            <strong>Poupança/Aplicações: </strong>
+            <span *ngIf="!isGettingBalance">{{savings | currency : 'BRL'}}</span>
+            <button *ngIf="!isGettingBalance" (click)="openEditBalance()" mat-icon-button aria-label="Editar" color="primary">
+                <mat-icon class="edit-balance">edit</mat-icon>
+            </button>
+            <span *ngIf="isGettingBalance">carregando saldo...</span>
+        </div>
+    </div>
+    <div class="row">
         <mat-tab-group>
-            <mat-tab label="Lançamentos pendentes">
+            <mat-tab label="Lançamentos futuros">
                 <div *ngFor="let month of entriesByMonth" class="row">
                    <div class="col" *ngIf="month.month >= 0 || month.entries.length > 0">
                     <h3>{{month.monthDescription}}</h3>
@@ -21,7 +31,7 @@
                             <div class="col-md-2">Data</div>
                             <div class="col-md-4">Descrição</div>
                             <div class="col-md-2">Valor</div>
-                            <div class="col-md-2">Previsão</div>
+                            <div class="col-md-2">Saldo Conta Corrente</div>
                             <div class="col-md-1">Efetivar</div>
                             <div class="col-md-1">Ações</div>
                         </div>
@@ -44,7 +54,7 @@
                                         {{entry.value | currency: 'BRL'}}  {{entry.type}}
                                     </div>
                                     <div class="col-md-2"  [style.color]="entry.prevision >= 0 ? 'blue' : 'red'">
-                                        <span class="label-mobile">Previsão:</span>
+                                        <span class="label-mobile">Saldo Conta Corrente:</span>
                                         {{entry.prevision | currency: 'BRL'}}
                                     </div>
                                     <div class="col-md-1">
@@ -64,6 +74,9 @@
                                     </div>
                             </div>
                         </div>
+                        <div class="footer">
+                           <strong> Total conta corrente + poupanças:</strong> {{month.totalMonth | currency: 'BRL' }}
+                        </div>
                     </div>
                    </div>
                 </div>
@@ -73,7 +86,7 @@
                 </div>
             </mat-tab>
 
-            <mat-tab label="Historico de Lançamentos">
+            <mat-tab label="Histórico de Lançamentos">
                 <app-historic (onEntriesChanged)="refresh()"></app-historic>
             </mat-tab>
 
@@ -252,7 +265,14 @@
         <mat-label>Saldo</mat-label>
         <input matInput currencyMask placeholder="Saldo" formControlName="newBalance">
     </mat-form-field>
-    <button mat-raised-button color="primary" class="dialog-button" (click)="updateBalance()">Salvar</button>
-    <button mat-raised-button color="secondary" class="dialog-button" (click)="closeEditBalance()">Fechar</button>
+    <mat-form-field>
+        <mat-label>Poupanças</mat-label>
+        <input matInput currencyMask placeholder="Poupanças" formControlName="newSavings">
+    </mat-form-field>
+    <mat-checkbox formControlName="createEntry">Gerar lançamento de correção</mat-checkbox>
+    <div class="col" style="margin-top: 10px">
+        <button mat-raised-button color="primary" class="dialog-button" (click)="updateBalance()">Salvar</button>
+        <button mat-raised-button color="secondary" class="dialog-button" (click)="closeEditBalance()">Fechar</button>
+    </div>
  </form>
 </ng-template>

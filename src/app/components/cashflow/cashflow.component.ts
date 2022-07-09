@@ -28,7 +28,8 @@ interface EntriesByMonth {
 
 export class CashflowComponent implements OnInit {
 
-  public balance: number;
+  public balance: number = 0;
+  public savings: number = 0;
   public balanceEdit: number;
   public isGettingBalance;
   public entriesByMonth: EntriesByMonth[] = [];
@@ -109,12 +110,15 @@ export class CashflowComponent implements OnInit {
     });
 
     this.formGroupBalance = this.fb.group({
-      newBalance: [null, [Validators.required]]
+      newBalance: [null, [Validators.required]],
+      newSavings: [null, [Validators.required]],
+      createEntry: [false]
     });
   }
 
   setBalance(user: User) {
     this.balance = user.balance;
+    this.savings = user.savings;
     this.isGettingBalance = false;
   }
 
@@ -190,11 +194,6 @@ export class CashflowComponent implements OnInit {
 
         entry.entries.push(newEntry);
       } 
-
-      if(newEntry.type === 'C')
-        entryByMonth.totalMonth+= newEntry.value;
-      else
-        entryByMonth.totalMonth-= newEntry.value;
     });
 
     this.calcBalance();
@@ -212,6 +211,7 @@ export class CashflowComponent implements OnInit {
         } 
         entry.prevision = prevision;
       });
+      entryByMonth.totalMonth = prevision + this.savings;
     });
   }
 
@@ -341,11 +341,14 @@ export class CashflowComponent implements OnInit {
     }
 
     const newBalance = this.formGroupBalance.value.newBalance;
+    const newSavings = this.formGroupBalance.value.newSavings;
+    const createEntry = this.formGroupBalance.value.createEntry;
 
-    this.userService.updateBalance(newBalance).subscribe({
+    this.userService.updateBalance(newBalance, newSavings, createEntry).subscribe({
       next: () => {
         this.snackBarService.open('Saldo atualizado', 'Fechar', { verticalPosition: 'top', duration: 3000 });
         this.balance = newBalance;
+        this.savings = newSavings;
         this.calcBalance();
         this.closeEditBalance();
       }, 
@@ -432,7 +435,10 @@ export class CashflowComponent implements OnInit {
   }
 
   openEditBalance() {
-    this.formGroupBalance.reset();
+    this.formGroupBalance.patchValue({
+      newBalance: this.balance,
+      newSavings: this.savings
+    })
     this.editBalanceDialogRef = this.dialog.open(this.editBalanceRef);
   }
 
