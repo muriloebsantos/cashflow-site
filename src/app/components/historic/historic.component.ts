@@ -103,7 +103,7 @@ export class HistoricComponent implements OnInit {
                 creditCardId: newEntry.creditCardId,
                 entries: []
               };
-              entryByMonth.entries.unshift(entry);
+              entryByMonth.entries.push(entry);
             } else {
               entry.value += newEntry.value;
             }
