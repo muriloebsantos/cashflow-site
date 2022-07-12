@@ -70,6 +70,12 @@
         <button mat-raised-button color="warn" class="dialog-button" (click)="delete(1)">Sim, excluir todos</button>
         <button mat-raised-button color="secondary" class="dialog-button" (click)="closeDialog()">Não, fechar</button>
     </ng-template>
+
+    <ng-template #deleteDialogRef>
+        <p>Deseja excluir o registro?</p>
+        <button mat-raised-button color="warn" class="dialog-button" (click)="delete(0)">Sim, excluir</button>
+        <button mat-raised-button color="secondary" class="dialog-button" (click)="closeDialog()">Não, fechar</button>
+    </ng-template>
     
     <ng-template #creditCardDetailsRef>
         <mat-dialog-content> 

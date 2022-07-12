@@ -36,8 +36,10 @@ export class HistoricComponent implements OnInit {
     private dialog: MatDialog
     ) { }
 
+  @ViewChild("deleteDialogRef") deleteOneDialogRef: TemplateRef<any>;
   @ViewChild("deleteManyDialogRef") deleteManyDialogRef: TemplateRef<any>;
   @ViewChild("creditCardDetailsRef") creditCardDetailsRef: TemplateRef<any>;
+
   public cardEntries: Entry[];
   public entriesByMonth: EntriesByMonth[] = [];
   public date: Date = new Date();
@@ -136,8 +138,13 @@ export class HistoricComponent implements OnInit {
   }
 
   openDeleteDialog(entry: Entry) {
-    this.dialogRef = this.dialog.open(this.deleteManyDialogRef);
-    this.entryToDelete = entry;
+    if(entry.recurrenceId) {
+      this.dialogRef = this.dialog.open(this.deleteManyDialogRef);
+      this.entryToDelete = entry;
+    } else {
+      this.dialogRef = this.dialog.open(this.deleteOneDialogRef);
+      this.entryToDelete = entry;
+    }
   }
 
   closeDialog() {
