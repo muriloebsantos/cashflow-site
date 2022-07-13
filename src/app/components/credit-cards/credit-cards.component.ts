@@ -17,7 +17,7 @@ export class CreditCardsComponent implements OnInit {
     private creditCardService: CreditCardService,
     private dialog: MatDialog,
     private fb: FormBuilder,
-    private snackBarService:MatSnackBar
+    private snackBarService: MatSnackBar
   ) { }
 
   public creditCards: CreditCard[] = []

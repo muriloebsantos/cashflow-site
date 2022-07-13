@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TokenService } from 'src/app/core/services/token.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-login',
@@ -17,6 +18,7 @@ export class LoginComponent implements OnInit {
               private tokenService: TokenService,
               private router: Router,
               private dialog: MatDialog,
+              private snackBarService: MatSnackBar
               ) { }
 
   @ViewChild("createUserTeplate") createSignUpCardRef: TemplateRef<any>;
@@ -44,6 +46,10 @@ export class LoginComponent implements OnInit {
         localStorage.setItem("cashflow_token", response.token);
         localStorage.setItem("exp", response.expiration);
         this.router.navigate(['']);
+      },
+      error: err => {
+        const errorMsg = err.error.error; 
+        this.snackBarService.open(errorMsg, 'Fechar', { verticalPosition: 'top', duration: 3000 });
       }
     });
   }
