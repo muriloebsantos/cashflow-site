@@ -10,5 +10,10 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 // .mat-tab-body-content { overflow: hidden!important;}
 
 .dialog-button {
-    margin-right: 4px !important;
+     margin-right: 4px !important; 
+}
+
+html, .mat-tab-body-content {
+    overflow-x: hidden !important;
+    padding-bottom: 2rem;
 }
