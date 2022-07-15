@@ -167,7 +167,7 @@
             </mat-tab>
 
             <mat-tab label="Gerenciar Cartões">
-                <app-credit-cards></app-credit-cards>
+                <app-credit-cards (onCardsChanged)="listCards()"></app-credit-cards>
             </mat-tab>
 
             <mat-tab label="Usuários" *ngIf="isAdmin">

@@ -82,18 +82,18 @@ export class CashflowComponent implements OnInit {
     this.isAdmin = this.userService.isAdmin();
 
     const userObservable = this.userService.getUser();
-    const creditCardsObservable = this.creditCardsService.getCreditCards();
     const pendingEntriesObservable = this.entriesService.getPendingEntries(this.date.getMonth() + 1, this.date.getFullYear(), 1);
 
    this.isGettingBalance = true;
 
-   forkJoin([userObservable, creditCardsObservable, pendingEntriesObservable]).subscribe({
+   forkJoin([userObservable, pendingEntriesObservable]).subscribe({
      next: results => {
        this.setBalance(results[0]);
-       this.setCreditCards(results[1]);
-       this.addPendingEntriesToView(results[2]);
+       this.addPendingEntriesToView(results[1]);
      }
    });
+
+   this.listCards();
   }
 
   initFormGroup() {
@@ -331,6 +331,14 @@ export class CashflowComponent implements OnInit {
       },
       error: () => {
         this.snackBarService.open('Erro ao atualizar', 'Fechar', { verticalPosition: 'top', duration: 3000 });
+      }
+    });
+  }
+
+  listCards() {
+    this.creditCardsService.getCreditCards().subscribe({
+      next: (responseCreditCards) => {
+        this.creditCards = responseCreditCards
       }
     });
   }

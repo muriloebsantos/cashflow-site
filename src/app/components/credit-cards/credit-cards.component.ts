@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { CreditCard } from 'src/app/core/models/credit-card';
@@ -10,6 +10,9 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   styleUrls: ['./credit-cards.component.scss']
 })
 export class CreditCardsComponent implements OnInit {
+
+  @Output() 
+  public onCardsChanged = new EventEmitter();
   public creditCardFormGroup:FormGroup
   public creditCardId = ''
 
@@ -36,6 +39,7 @@ export class CreditCardsComponent implements OnInit {
       this.creditCardService.createCreditCard(creditCard).subscribe((createdCard) => {
         this.createCardDialogRef.close();
         this.listCards();
+        this.onCardsChanged.emit()
         this.snackBarService.open('Criação de cartão concluida','Fechar', { verticalPosition: 'top', duration: 3000 });
       });
     }
@@ -48,6 +52,7 @@ export class CreditCardsComponent implements OnInit {
       this.creditCardService.updateCreditCard(creditCard).subscribe((createdCard) => {
         this.createCardDialogRef.close();
         this.listCards();
+        this.onCardsChanged.emit()
         this.snackBarService.open('Atualização de cartão concluida','Fechar',{ verticalPosition: 'top', duration: 3000 });
       });
     }
@@ -57,6 +62,7 @@ export class CreditCardsComponent implements OnInit {
     this.creditCardService.deleteCreditCard(this.creditCardId).subscribe(() => {
       this.closeDeleteModal();
       this.listCards();
+      this.onCardsChanged.emit()
       this.snackBarService.open('Exclusão de cartão concluida','Fechar', { verticalPosition: 'top', duration: 3000 });
     })
   }
