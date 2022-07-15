@@ -50,11 +50,10 @@ export class CashflowComponent implements OnInit {
   public invoices: Date[] = [];
   public cardEntries: Entry[];
   public entryToEdit: Entry;
+  public isAdmin: boolean = false;
 
- 
 
   private entryToDelete: Entry;
-
   private dialogRef: MatDialogRef<any, any>;
   private creditCardDetailsDialogRef: MatDialogRef<any, any>;
   private editEntryDialogRef: MatDialogRef<any, any>;
@@ -80,6 +79,7 @@ export class CashflowComponent implements OnInit {
     this.initFormGroup();
     this.initDate();
     this.addEntriesByMonth(true);
+    this.isAdmin = this.userService.isAdmin();
 
     const userObservable = this.userService.getUser();
     const creditCardsObservable = this.creditCardsService.getCreditCards();

@@ -1,0 +1,40 @@
+<div class="row header">
+  <div class="col-md-2 blockHeader">Nome</div>
+  <div class="col-md-3 blockHeader">Email</div>
+  <div class="col-md-2 blockHeader">Data de Cadastro</div>
+  <div class="col-md-2 blockHeader">Último Login</div>
+  <div class="col-md-2 blockHeader">Última Atividade</div>
+  <div class="col-md-1 blockHeader">Bloqueado</div>
+</div>
+
+<div *ngFor="let user of usersData" class="row body row-user">
+  <div class="col-md-2 row">
+    <span class="label-mobile">Nome:</span>
+    {{user.name}}
+  </div>
+
+  <div class="col-md-3 row">
+    <span class="label-mobile">Email:</span>
+    {{user.email}}
+  </div>
+
+  <div class="col-md-2 row">
+    <span class="label-mobile">Data de Cadastro:</span>
+    {{user.creationDate | date : 'dd/MM/yyyy hh:mm'}}
+  </div>
+  
+  <div class="col-md-2 row">
+    <span class="label-mobile">Último Login:</span>
+    {{user.lastLoginDate | date : 'dd/MM/yyyy hh:mm'}}
+  </div>
+
+  <div class="col-md-2 row">
+    <span class="label-mobile">Última Atividade:</span>
+    {{user.lastActivityDate | date : 'dd/MM/yyyy hh:mm'}}
+  </div>
+
+  <div class="col-md-1 row">
+    <span class="label-mobile">Bloqueado:</span>
+    {{user.isBlocked ? 'Sim' : 'Não' }}
+  </div>
+</div>
