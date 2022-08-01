@@ -85,11 +85,7 @@
                     <button mat-raised-button color="primary" (click)="loadMoreEntries()">Carregar mais</button>
                 </div>
             </mat-tab>
-
-            <mat-tab label="Histórico de Lançamentos">
-                <app-historic (onEntriesChanged)="refresh()"></app-historic>
-            </mat-tab>
-
+            
             <mat-tab label="Novo lançamento">
                 <form id="form" [formGroup]="formGroup" #formDirective="ngForm">
                     <div class="row">
@@ -140,9 +136,9 @@
                             <mat-form-field appearance="fill">
                                 <mat-label>Recorrência</mat-label>
                                 <mat-select formControlName="recurrenceType">
-                                <mat-option *ngFor="let recurrence of recurrences" [value]="recurrence.id">
-                                    {{recurrence.description}}
-                                </mat-option>
+                                    <mat-option *ngFor="let recurrence of recurrences" [value]="recurrence.id">
+                                        {{recurrence.description}}
+                                    </mat-option>
                                 </mat-select>
                             </mat-form-field>
                         </div>
@@ -159,13 +155,17 @@
                         </div>
                     </div>
                     <div class="row">
-                    <div class="col">
-                        <button mat-raised-button color="primary" (click)="save(formDirective)">Salvar</button>
-                    </div>
+                        <div class="col">
+                            <button mat-raised-button color="primary" (click)="save(formDirective)">Salvar</button>
+                        </div>
                     </div>
                 </form>
             </mat-tab>
-
+            
+            <mat-tab label="Histórico de Lançamentos">
+                <app-historic (onEntriesChanged)="refresh()"></app-historic>
+            </mat-tab>
+            
             <mat-tab label="Gerenciar Cartões">
                 <app-credit-cards (onCardsChanged)="listCards()"></app-credit-cards>
             </mat-tab>
