@@ -245,7 +245,7 @@ export class CashflowComponent implements OnInit {
     date.setMonth(date.getMonth() - 1);
     date.setDate(dueDay);
 
-    for(let i = 0; i < 3; i++) {
+    for(let i = 0; i < 4; i++) {
       invoices.push(new Date(date));
 
       date.setMonth(date.getMonth() + 1);
