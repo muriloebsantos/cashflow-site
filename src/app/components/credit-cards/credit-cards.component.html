@@ -10,8 +10,8 @@
   <tbody>
     <tr *ngFor="let card of creditCards">
       <td>{{ card.name }}</td>
-      <td>{{ card.dueDay }}</td>
       <td>{{ card.closingDay }}</td>
+      <td>{{ card.dueDay }}</td>
       <td>
         <button mat-icon-button aria-label="Editar" color="primary" (click)="openEditModal(card)">
           <mat-icon colo>edit</mat-icon>
