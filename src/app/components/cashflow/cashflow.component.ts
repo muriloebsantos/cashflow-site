@@ -81,19 +81,24 @@ export class CashflowComponent implements OnInit {
     this.addEntriesByMonth(true);
     this.isAdmin = this.userService.isAdmin();
 
-    const userObservable = this.userService.getUser();
+   
     const pendingEntriesObservable = this.entriesService.getPendingEntries(this.date.getMonth() + 1, this.date.getFullYear(), 1);
 
    this.isGettingBalance = true;
 
-   forkJoin([userObservable, pendingEntriesObservable]).subscribe({
+   forkJoin([pendingEntriesObservable]).subscribe({
      next: results => {
-       this.setBalance(results[0]);
-       this.addPendingEntriesToView(results[1]);
+       this.addPendingEntriesToView(results[0]);
      }
    });
 
+   this.getBalance();
    this.listCards();
+  }
+
+  async getBalance() {
+   const user =  await this.userService.getUser().toPromise();
+   this.setBalance(user);
   }
 
   initFormGroup() {
@@ -106,7 +111,8 @@ export class CashflowComponent implements OnInit {
       invoice: [''],
       recurrenceType: [''],
       recurrenceNumber: [''],
-      showRecurrenceNumber: [false]
+      showRecurrenceNumber: [false],
+      commitEntries: [false]
     });
 
     this.formGroupBalance = this.fb.group({
@@ -292,6 +298,7 @@ export class CashflowComponent implements OnInit {
       entryRequest.purchaseDate = dueDate;
     }
 
+    entryRequest.isPaid = false;
     this.entriesService.saveEntry(entryRequest).subscribe({
       next: () => {
         formDirective.resetForm();
@@ -301,6 +308,9 @@ export class CashflowComponent implements OnInit {
         });
         this.refresh();
         this.snackBarService.open('Salvo com sucesso', 'Fechar', { verticalPosition: 'top', duration: 3000 });
+        if(entryRequest.commitEntries) {
+          this.getBalance()
+        }
       },
       error: () => {
         this.snackBarService.open('Erro ao salvar', 'Fechar', { verticalPosition: 'top', duration: 3000 });

@@ -14,4 +14,5 @@ export interface Entry {
     recurrenceTotal?: number;
     prevision?: number;
     entries?: Entry[];
+    commitEntries?: boolean;
 }
