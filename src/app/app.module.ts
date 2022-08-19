@@ -19,7 +19,7 @@ import { SignUpComponent } from './components/sign-up/sign-up.component';
 import { HistoricComponent } from './components/historic/historic.component';
 import { NgHttpLoaderModule } from 'ng-http-loader';
 import { AdminUsersComponent } from './components/admin-users/admin-users.component';
-
+import { CategoryComponent } from './components/category/category.component';
 export const customCurrencyMaskConfig = {
   align: "left",
   allowNegative: false,
@@ -44,7 +44,8 @@ export const customCurrencyMaskConfig = {
     CreditCardsComponent,
     SignUpComponent,
     HistoricComponent,
-    AdminUsersComponent
+    AdminUsersComponent,
+    CategoryComponent
   ],
   imports: [
     BrowserModule,

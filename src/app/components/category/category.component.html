@@ -1,0 +1,42 @@
+<button (click)="openCreateModal()"  mat-icon-button color="primary">Criar Categoria +</button>
+
+<table class="table table-striped">
+  <thead class="">
+    <th>Nome da Categoria</th>
+    <th>Ações</th>
+  </thead>
+  <tbody>
+    <tr *ngFor="let category of categories">
+      <td>{{category.name}}</td>
+      <td>
+        <button mat-icon-button aria-label="Editar" color="primary" (click)="openEditModal()">
+          <mat-icon colo>edit</mat-icon>
+        </button>
+        <button mat-icon-button aria-label="Excluir" color="primary" (click)="openDeleteModal()">
+          <mat-icon colo>delete</mat-icon>
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<ng-template #CreateCategoryModal>
+  <form name="CreateCategory" [formGroup]="categoryFormGroup" class="createCategoryForm">
+    <h3>Crie Uma Nova Categoria</h3>
+    <mat-form-field>
+      <input matInput type="text" placeholder="Nome da Categoria" formControlName="name">
+    </mat-form-field>
+    <div class="createCardButtonsDiv">
+      <button *ngIf="!category.id" mat-raised-button color="primary" class="dialog-button" (click)="createCreditCard()">Adicionar</button>
+      <button *ngIf="category.id" mat-raised-button color="primary" class="dialog-button" (click)="updateCreditCard()">Atualizar</button>
+      <button mat-raised-button color="secondary" (click)="closeModal()">Fechar</button>
+    </div>
+  
+  </form>
+</ng-template>
+<ng-template #EditCategoryModal>
+  yah Edit IT!! yo
+</ng-template>
+<ng-template #DeleteCategoryModal>
+  yo are u sure to remove It!! ???
+</ng-template>
