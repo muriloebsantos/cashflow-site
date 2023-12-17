@@ -75,25 +75,27 @@ export class CashflowComponent implements OnInit {
     ) { }
 
   ngOnInit() {
+    this.init();
+  }
 
+  async init() {
     this.initFormGroup();
     this.initDate();
     this.addEntriesByMonth(true);
     this.isAdmin = this.userService.isAdmin();
 
-   
     const pendingEntriesObservable = this.entriesService.getPendingEntries(this.date.getMonth() + 1, this.date.getFullYear(), 1);
 
-   this.isGettingBalance = true;
+    this.isGettingBalance = true;
+    
+    await this.listCards();
+    await this.getBalance();
 
-   forkJoin([pendingEntriesObservable]).subscribe({
+    forkJoin([pendingEntriesObservable]).subscribe({
      next: results => {
        this.addPendingEntriesToView(results[0]);
      }
-   });
-
-   this.getBalance();
-   this.listCards();
+   }); 
   }
 
   async getBalance() {
