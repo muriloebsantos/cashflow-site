@@ -214,7 +214,7 @@
 
                                         </span>
                                     </td>
-                                    <td class="col">{{entry.value | currency: 'BRL'}}</td>
+                                    <td class="col">{{entry.value | currency: 'BRL'}} {{entry.type == 'C' ? '(Crédito)' : ''}}</td>
                                     <td class="col">
                                         <button (click)="openEditEntry(entry)" mat-icon-button aria-label="Editar" color="primary">
                                             <mat-icon colo>edit</mat-icon>
