@@ -95,7 +95,7 @@
                                     {{entry.description}}
                                     <span *ngIf="entry.showRecurrenceNumber">({{entry.recurrenceNumber}}/{{entry.recurrenceTotal}})</span>
                                 </td>
-                                <td>{{entry.value | currency: 'BRL'}}</td>
+                                <td class="col">{{entry.value | currency: 'BRL'}} {{entry.type == 'C' ? '(Crédito)' : ''}}</td>
                                 <td *ngIf="false">
                                     <button (click)="openEditEntry(entry)" mat-icon-button aria-label="Editar" color="primary">
                                         <mat-icon colo>edit</mat-icon>

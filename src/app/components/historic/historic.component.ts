@@ -100,15 +100,27 @@ export class HistoricComponent implements OnInit {
               entry = {
                 dueDate: newEntry.dueDate,
                 description: this.creditCards.find(c => c._id === newEntry.creditCardId).name,
-                type: 'D',
+                type: newEntry.type,
                 value: newEntry.value,
                 creditCardId: newEntry.creditCardId,
                 entries: []
               };
               entryByMonth.entries.push(entry);
             } else {
-              entry.value += newEntry.value;
+              if(newEntry.type == 'D') {
+                entry.value+= newEntry.value;
+              } else {
+                entry.value-= newEntry.value;
+              }
             }
+
+            if(entry.value >= 0) {
+              entry.type = 'D';
+            } else {
+              entry.type = 'C';
+              entry.value = entry.value * -1;
+            }
+            
             entry.entries.push(newEntry);
           }
           
