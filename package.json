@@ -25,7 +25,7 @@
     "js-sha512": "^0.8.0",
     "jwt-decode": "^3.1.2",
     "moment": "^2.29.1",
-    "ng-http-loader": "^9.0.0",
+    "ng-http-loader": "^10.0.0",
     "ngx-currency": "^2.5.2",
     "rxjs": "~6.6.0",
     "tslib": "^2.0.0",
