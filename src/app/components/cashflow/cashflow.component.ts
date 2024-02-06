@@ -6,7 +6,7 @@ import { User } from 'src/app/core/models/user';
 import { CreditCardService } from 'src/app/core/services/credit-card.service';
 import { EntryService } from 'src/app/core/services/entry.service';
 import { UserService } from 'src/app/core/services/user.service';
-import { FormBuilder, FormGroup, FormGroupDirective, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, FormGroupDirective, Validators } from '@angular/forms';
 import * as moment from 'moment';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
@@ -35,9 +35,9 @@ export class CashflowComponent implements OnInit {
   public entriesByMonth: EntriesByMonth[] = [];
   public creditCards: CreditCard[] = [];
   public date: Date;
-  public formGroup: FormGroup;
-  public formGroupEdition: FormGroup;
-  public formGroupBalance: FormGroup;
+  public formGroup: UntypedFormGroup;
+  public formGroupEdition: UntypedFormGroup;
+  public formGroupBalance: UntypedFormGroup;
   
   
   public recurrences = [
@@ -69,7 +69,7 @@ export class CashflowComponent implements OnInit {
   constructor(private userService: UserService,
               private entriesService: EntryService,
               private creditCardsService: CreditCardService,
-              private fb: FormBuilder,
+              private fb: UntypedFormBuilder,
               private snackBarService: MatSnackBar,
               private dialog: MatDialog
     ) { }

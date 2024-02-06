@@ -1,5 +1,5 @@
 import { Component, EventEmitter, OnInit, Output, TemplateRef, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { CreditCard } from 'src/app/core/models/credit-card';
 import { CreditCardService } from 'src/app/core/services/credit-card.service';
@@ -13,13 +13,13 @@ export class CreditCardsComponent implements OnInit {
 
   @Output() 
   public onCardsChanged = new EventEmitter();
-  public creditCardFormGroup:FormGroup
+  public creditCardFormGroup:UntypedFormGroup
   public creditCardId = ''
 
   constructor(
     private creditCardService: CreditCardService,
     private dialog: MatDialog,
-    private fb: FormBuilder,
+    private fb: UntypedFormBuilder,
     private snackBarService: MatSnackBar
   ) { }
 
